@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MedControl - Seguimiento de Medicación</title>
+
+    <link rel="stylesheet" href="medicina.css">
+</head>
+
+<body>
+
+    <!-- ENCABEZADO -->
+    <header class="header">
+
+        <div class="logo">
+            <div class="logo-icon">💊</div>
+
+            <div>
+                <h1>MedControl</h1>
+                <p>Seguimiento de medicación</p>
+            </div>
+        </div>
+
+        <button id="btnNotificaciones" class="btn-notificacion">
+            🔔 Activar notificaciones
+        </button>
+
+    </header>
+
+
+    <main class="contenedor">
+
+        <!-- INFORMACIÓN DEL PACIENTE -->
+        <section class="card paciente-card">
+
+            <div class="card-titulo">
+                <div>
+                    <h2>👤 Información del paciente</h2>
+                    <p>Datos de la persona que recibirá los recordatorios.</p>
+                </div>
+            </div>
+
+            <div class="form-grid">
+
+                <div class="campo">
+                    <label for="nombrePaciente">Nombre completo</label>
+                    <input
+                        type="text"
+                        id="nombrePaciente"
+                        placeholder="Ej. Juan Pérez">
+                </div>
+
+                <div class="campo">
+                    <label for="edadPaciente">Edad</label>
+                    <input
+                        type="number"
+                        id="edadPaciente"
+                        placeholder="Ej. 45">
+                </div>
+
+            </div>
+
+            <button id="btnGuardarPaciente" class="btn btn-primary">
+                💾 Guardar información
+            </button>
+
+        </section>
+
+
+        <!-- PRÓXIMA TOMA -->
+        <section class="card proxima-card">
+
+            <div class="proxima-icon">
+                ⏰
+            </div>
+
+            <div class="proxima-info">
+
+                <span class="etiqueta">PRÓXIMA TOMA</span>
+
+                <h2 id="proximaMedicamento">
+                    No hay medicamentos programados
+                </h2>
+
+                <p id="proximaHora">
+                    Agrega un medicamento para comenzar.
+                </p>
+
+                <div id="contador" class="contador">
+                    --
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- AGREGAR MEDICAMENTO -->
+        <section class="card">
+
+            <div class="card-titulo">
+
+                <div>
+                    <h2>💊 Programar medicamento</h2>
+
+                    <p>
+                        Crea una rutina para recordar cada toma.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <form id="formMedicamento">
+
+                <div class="form-grid">
+
+                    <!-- MEDICAMENTO -->
+                    <div class="campo">
+
+                        <label for="nombreMedicamento">
+                            Nombre del medicamento
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nombreMedicamento"
+                            placeholder="Ej. Paracetamol"
+                            required>
+
+                    </div>
+
+
+                    <!-- DOSIS -->
+                    <div class="campo">
+
+                        <label for="dosis">
+                            Dosis
+                        </label>
+
+                        <input
+                            type="text"
+                            id="dosis"
+                            placeholder="Ej. 500 mg"
+                            required>
+
+                    </div>
+
+
+                    <!-- FRECUENCIA -->
+                    <div class="campo">
+
+                        <label for="frecuencia">
+                            Frecuencia
+                        </label>
+
+                        <select id="frecuencia" required>
+
+                            <option value="">
+                                Seleccionar
+                            </option>
+
+                            <option value="1">
+                                Una vez al día
+                            </option>
+
+                            <option value="2">
+                                Dos veces al día
+                            </option>
+
+                            <option value="3">
+                                Tres veces al día
+                            </option>
+
+                            <option value="4">
+                                Cuatro veces al día
+                            </option>
+
+                            <option value="personalizado">
+                                Horarios personalizados
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- FECHA INICIO -->
+                    <div class="campo">
+
+                        <label for="fechaInicio">
+                            Fecha de inicio
+                        </label>
+
+                        <input
+                            type="date"
+                            id="fechaInicio"
+                            required>
+
+                    </div>
+
+
+                    <!-- FECHA FIN -->
+                    <div class="campo">
+
+                        <label for="fechaFin">
+                            Fecha de finalización
+                        </label>
+
+                        <input
+                            type="date"
+                            id="fechaFin">
+
+                    </div>
+
+
+                    <!-- ACTIVIDAD -->
+                    <div class="campo">
+
+                        <label for="actividad">
+                            Asociar con actividad
+                        </label>
+
+                        <select id="actividad">
+
+                            <option value="Sin actividad">
+                                Sin actividad
+                            </option>
+
+                            <option value="Desayuno">
+                                🍳 Desayuno
+                            </option>
+
+                            <option value="Almuerzo">
+                                🍽️ Almuerzo
+                            </option>
+
+                            <option value="Cena">
+                                🍲 Cena
+                            </option>
+
+                            <option value="Cepillado de dientes">
+                                🪥 Cepillado de dientes
+                            </option>
+
+                            <option value="Antes de dormir">
+                                🛏️ Antes de dormir
+                            </option>
+
+                            <option value="Al despertar">
+                                ☀️ Al despertar
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- HORARIOS -->
+                <div class="horarios-section">
+
+                    <h3>⏰ Horarios de toma</h3>
+
+                    <p>
+                        Selecciona las horas en las que el paciente debe tomar el medicamento.
+                    </p>
+
+                    <div id="horariosContainer" class="horarios-container">
+
+                        <div class="horario-item">
+
+                            <label>
+                                Hora de toma
+                            </label>
+
+                            <input
+                                type="time"
+                                class="horaMedicamento"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+                        ➕ Agregar tratamiento
+                    </button>
+
+                    <button
+                        type="reset"
+                        class="btn btn-secondary">
+                        Limpiar
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- MEDICAMENTOS -->
+        <section class="card">
+
+            <div class="card-titulo">
+
+                <div>
+                    <h2>📋 Tratamientos programados</h2>
+
+                    <p>
+                        Medicamentos registrados para el paciente.
+                    </p>
+                </div>
+
+                <span id="cantidadMedicamentos" class="badge">
+                    0
+                </span>
+
+            </div>
+
+
+            <div id="listaMedicamentos" class="medicamentos-lista">
+
+                <div class="vacio">
+
+                    <div class="vacio-icon">
+                        💊
+                    </div>
+
+                    <h3>No hay tratamientos</h3>
+
+                    <p>
+                        Agrega un medicamento para comenzar a crear la rutina.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- HISTORIAL -->
+        <section class="card">
+
+            <div class="card-titulo">
+
+                <div>
+                    <h2>📊 Seguimiento de tomas</h2>
+
+                    <p>
+                        Registro de medicamentos tomados durante el día.
+                    </p>
+                </div>
+
+            </div>
+
+            <div id="historial" class="historial">
+
+                <div class="vacio pequeño">
+
+                    <p>
+                        Todavía no hay registros de tomas.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- MODAL DE RECORDATORIO -->
+    <div id="modalRecordatorio" class="modal">
+
+        <div class="modal-contenido">
+
+            <div class="modal-icon">
+                🔔
+            </div>
+
+            <h2>¡Hora de tu medicamento!</h2>
+
+            <div id="recordatorioTexto"></div>
+
+            <div class="modal-botones">
+
+                <button
+                    id="btnPosponer"
+                    class="btn btn-secondary">
+                    ⏰ Posponer 10 minutos
+                </button>
+
+                <button
+                    id="btnTomado"
+                    class="btn btn-primary">
+                    ✅ Ya lo tomé
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <footer>
+
+        <p>
+            MedControl © 2026 | Sistema de seguimiento de medicación
+        </p>
+
+        <small>
+            Este sistema sirve como herramienta de recordatorio y seguimiento.
+            No sustituye las indicaciones de un profesional de la salud.
+        </small>
+
+    </footer>
+
+
+    <script src="medicina.js"></script>
+
+</body>
+</html>
