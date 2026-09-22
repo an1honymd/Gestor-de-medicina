@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,16 +12,23 @@
 
 <body>
 
-    <!-- ENCABEZADO -->
+    <!-- =========================
+         ENCABEZADO
+    ========================== -->
+
     <header class="header">
 
         <div class="logo">
-            <div class="logo-icon">💊</div>
+
+            <div class="logo-icon">
+                💊
+            </div>
 
             <div>
                 <h1>MedControl</h1>
-                <p>Seguimiento de medicación</p>
+                <p>Seguimiento y registro de tratamientos</p>
             </div>
+
         </div>
 
         <button id="btnNotificaciones" class="btn-notificacion">
@@ -32,64 +40,303 @@
 
     <main class="contenedor">
 
-        <!-- INFORMACIÓN DEL PACIENTE -->
+
+        <!-- =========================
+             INFORMACIÓN DEL PACIENTE
+        ========================== -->
+
         <section class="card paciente-card">
 
             <div class="card-titulo">
+
                 <div>
+
                     <h2>👤 Información del paciente</h2>
-                    <p>Datos de la persona que recibirá los recordatorios.</p>
+
+                    <p>
+                        Datos generales de la persona que recibirá el tratamiento.
+                    </p>
+
                 </div>
+
             </div>
+
 
             <div class="form-grid">
 
                 <div class="campo">
-                    <label for="nombrePaciente">Nombre completo</label>
+
+                    <label for="nombrePaciente">
+                        Nombre completo
+                    </label>
+
                     <input
                         type="text"
                         id="nombrePaciente"
                         placeholder="Ej. Juan Pérez">
+
                 </div>
 
+
                 <div class="campo">
-                    <label for="edadPaciente">Edad</label>
+
+                    <label for="edadPaciente">
+                        Edad
+                    </label>
+
                     <input
                         type="number"
                         id="edadPaciente"
                         placeholder="Ej. 45">
+
                 </div>
 
             </div>
 
-            <button id="btnGuardarPaciente" class="btn btn-primary">
+
+            <button
+                id="btnGuardarPaciente"
+                class="btn btn-primary">
+
                 💾 Guardar información
+
             </button>
 
         </section>
 
 
-        <!-- PRÓXIMA TOMA -->
+
+        <!-- =========================
+             REGISTRO DE TRATAMIENTO
+        ========================== -->
+
+        <section class="card tratamiento-card">
+
+            <div class="card-titulo">
+
+                <div>
+
+                    <h2>🏥 Registro de tratamiento</h2>
+
+                    <p>
+                        Registra la información clínica necesaria
+                        para facilitar la planificación del tratamiento.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form id="formTratamiento">
+
+
+                <!-- HISTORIAL CLÍNICO -->
+
+                <div class="campo campo-completo">
+
+                    <label for="historialClinico">
+                        📋 Historial clínico
+                    </label>
+
+                    <textarea
+                        id="historialClinico"
+                        rows="5"
+                        placeholder="Ingrese antecedentes médicos, enfermedades previas, cirugías, hospitalizaciones u otra información clínica importante..."></textarea>
+
+                </div>
+
+
+                <!-- ALERGIAS -->
+
+                <div class="campo campo-completo">
+
+                    <label for="alergias">
+                        ⚠️ Alergias
+                    </label>
+
+                    <textarea
+                        id="alergias"
+                        rows="4"
+                        placeholder="Ej. Penicilina, alimentos, medicamentos u otras alergias conocidas. Si no posee, escriba 'Ninguna conocida'."></textarea>
+
+                </div>
+
+
+                <!-- MEDICACIONES ACTUALES -->
+
+                <div class="campo campo-completo">
+
+                    <label for="medicacionesActuales">
+                        💊 Medicaciones actuales
+                    </label>
+
+                    <textarea
+                        id="medicacionesActuales"
+                        rows="4"
+                        placeholder="Indique medicamentos que actualmente utiliza, dosis y frecuencia si se conocen..."></textarea>
+
+                </div>
+
+
+                <!-- MEDICACIONES PASADAS -->
+
+                <div class="campo campo-completo">
+
+                    <label for="medicacionesPasadas">
+                        💊 Medicaciones pasadas
+                    </label>
+
+                    <textarea
+                        id="medicacionesPasadas"
+                        rows="4"
+                        placeholder="Indique medicamentos utilizados anteriormente y, si se conoce, el motivo por el cual fueron suspendidos..."></textarea>
+
+                </div>
+
+
+                <!-- RESULTADOS DE PRUEBAS -->
+
+                <div class="campo campo-completo">
+
+                    <label for="resultadosPruebas">
+                        🧪 Resultados de pruebas
+                    </label>
+
+                    <textarea
+                        id="resultadosPruebas"
+                        rows="5"
+                        placeholder="Ingrese resultados relevantes de análisis de laboratorio, estudios, radiografías u otras pruebas..."></textarea>
+
+                </div>
+
+
+                <!-- OBSERVACIONES -->
+
+                <div class="campo campo-completo">
+
+                    <label for="observaciones">
+                        📝 Observaciones del tratamiento
+                    </label>
+
+                    <textarea
+                        id="observaciones"
+                        rows="4"
+                        placeholder="Observaciones adicionales relacionadas con el tratamiento..."></textarea>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        💾 Guardar registro de tratamiento
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="btnLimpiarTratamiento"
+                        class="btn btn-secondary">
+
+                        🧹 Limpiar
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =========================
+             RESUMEN CLÍNICO
+        ========================== -->
+
+        <section class="card">
+
+            <div class="card-titulo">
+
+                <div>
+
+                    <h2>📊 Resumen clínico</h2>
+
+                    <p>
+                        Información registrada del paciente.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="resumenClinico"
+                class="resumen-clinico">
+
+                <div class="vacio">
+
+                    <div class="vacio-icon">
+                        🏥
+                    </div>
+
+                    <h3>
+                        No hay información clínica registrada
+                    </h3>
+
+                    <p>
+                        Completa el registro de tratamiento
+                        para visualizar la información.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             PRÓXIMA TOMA
+        ========================== -->
+
         <section class="card proxima-card">
 
             <div class="proxima-icon">
                 ⏰
             </div>
 
+
             <div class="proxima-info">
 
-                <span class="etiqueta">PRÓXIMA TOMA</span>
+                <span class="etiqueta">
+                    PRÓXIMA TOMA
+                </span>
+
 
                 <h2 id="proximaMedicamento">
                     No hay medicamentos programados
                 </h2>
 
+
                 <p id="proximaHora">
                     Agrega un medicamento para comenzar.
                 </p>
 
-                <div id="contador" class="contador">
+
+                <div
+                    id="contador"
+                    class="contador">
+
                     --
+
                 </div>
 
             </div>
@@ -97,17 +344,23 @@
         </section>
 
 
-        <!-- AGREGAR MEDICAMENTO -->
+
+        <!-- =========================
+             PROGRAMAR MEDICAMENTO
+        ========================== -->
+
         <section class="card">
 
             <div class="card-titulo">
 
                 <div>
+
                     <h2>💊 Programar medicamento</h2>
 
                     <p>
                         Crea una rutina para recordar cada toma.
                     </p>
+
                 </div>
 
             </div>
@@ -117,7 +370,7 @@
 
                 <div class="form-grid">
 
-                    <!-- MEDICAMENTO -->
+
                     <div class="campo">
 
                         <label for="nombreMedicamento">
@@ -133,7 +386,6 @@
                     </div>
 
 
-                    <!-- DOSIS -->
                     <div class="campo">
 
                         <label for="dosis">
@@ -149,14 +401,15 @@
                     </div>
 
 
-                    <!-- FRECUENCIA -->
                     <div class="campo">
 
                         <label for="frecuencia">
                             Frecuencia
                         </label>
 
-                        <select id="frecuencia" required>
+                        <select
+                            id="frecuencia"
+                            required>
 
                             <option value="">
                                 Seleccionar
@@ -187,7 +440,6 @@
                     </div>
 
 
-                    <!-- FECHA INICIO -->
                     <div class="campo">
 
                         <label for="fechaInicio">
@@ -202,7 +454,6 @@
                     </div>
 
 
-                    <!-- FECHA FIN -->
                     <div class="campo">
 
                         <label for="fechaFin">
@@ -216,7 +467,6 @@
                     </div>
 
 
-                    <!-- ACTIVIDAD -->
                     <div class="campo">
 
                         <label for="actividad">
@@ -260,16 +510,20 @@
                 </div>
 
 
-                <!-- HORARIOS -->
                 <div class="horarios-section">
 
-                    <h3>⏰ Horarios de toma</h3>
+                    <h3>
+                        ⏰ Horarios de toma
+                    </h3>
 
                     <p>
                         Selecciona las horas en las que el paciente debe tomar el medicamento.
                     </p>
 
-                    <div id="horariosContainer" class="horarios-container">
+
+                    <div
+                        id="horariosContainer"
+                        class="horarios-container">
 
                         <div class="horario-item">
 
@@ -294,13 +548,18 @@
                     <button
                         type="submit"
                         class="btn btn-primary">
+
                         ➕ Agregar tratamiento
+
                     </button>
+
 
                     <button
                         type="reset"
                         class="btn btn-secondary">
+
                         Limpiar
+
                     </button>
 
                 </div>
@@ -310,27 +569,42 @@
         </section>
 
 
-        <!-- MEDICAMENTOS -->
+
+        <!-- =========================
+             MEDICAMENTOS
+        ========================== -->
+
         <section class="card">
 
             <div class="card-titulo">
 
                 <div>
-                    <h2>📋 Tratamientos programados</h2>
+
+                    <h2>
+                        📋 Tratamientos programados
+                    </h2>
 
                     <p>
                         Medicamentos registrados para el paciente.
                     </p>
+
                 </div>
 
-                <span id="cantidadMedicamentos" class="badge">
+
+                <span
+                    id="cantidadMedicamentos"
+                    class="badge">
+
                     0
+
                 </span>
 
             </div>
 
 
-            <div id="listaMedicamentos" class="medicamentos-lista">
+            <div
+                id="listaMedicamentos"
+                class="medicamentos-lista">
 
                 <div class="vacio">
 
@@ -338,10 +612,12 @@
                         💊
                     </div>
 
-                    <h3>No hay tratamientos</h3>
+                    <h3>
+                        No hay tratamientos
+                    </h3>
 
                     <p>
-                        Agrega un medicamento para comenzar a crear la rutina.
+                        Agrega un medicamento para comenzar.
                     </p>
 
                 </div>
@@ -351,22 +627,33 @@
         </section>
 
 
-        <!-- HISTORIAL -->
+
+        <!-- =========================
+             HISTORIAL
+        ========================== -->
+
         <section class="card">
 
             <div class="card-titulo">
 
                 <div>
-                    <h2>📊 Seguimiento de tomas</h2>
+
+                    <h2>
+                        📊 Seguimiento de tomas
+                    </h2>
 
                     <p>
-                        Registro de medicamentos tomados durante el día.
+                        Registro de medicamentos tomados.
                     </p>
+
                 </div>
 
             </div>
 
-            <div id="historial" class="historial">
+
+            <div
+                id="historial"
+                class="historial">
 
                 <div class="vacio pequeño">
 
@@ -383,8 +670,14 @@
     </main>
 
 
-    <!-- MODAL DE RECORDATORIO -->
-    <div id="modalRecordatorio" class="modal">
+
+    <!-- =========================
+         MODAL RECORDATORIO
+    ========================== -->
+
+    <div
+        id="modalRecordatorio"
+        class="modal">
 
         <div class="modal-contenido">
 
@@ -392,22 +685,32 @@
                 🔔
             </div>
 
-            <h2>¡Hora de tu medicamento!</h2>
+
+            <h2>
+                ¡Hora de tu medicamento!
+            </h2>
+
 
             <div id="recordatorioTexto"></div>
+
 
             <div class="modal-botones">
 
                 <button
                     id="btnPosponer"
                     class="btn btn-secondary">
+
                     ⏰ Posponer 10 minutos
+
                 </button>
+
 
                 <button
                     id="btnTomado"
                     class="btn btn-primary">
+
                     ✅ Ya lo tomé
+
                 </button>
 
             </div>
@@ -417,14 +720,16 @@
     </div>
 
 
+
     <footer>
 
         <p>
-            MedControl © 2026 | Sistema de seguimiento de medicación
+            MedControl © 2026 |
+            Sistema de seguimiento de medicación
         </p>
 
         <small>
-            Este sistema sirve como herramienta de recordatorio y seguimiento.
+            Este sistema es una herramienta de registro y recordatorio.
             No sustituye las indicaciones de un profesional de la salud.
         </small>
 
@@ -435,3 +740,4 @@
 
 </body>
 </html>
+```
