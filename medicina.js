@@ -1,35 +1,67 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+
     /* =========================================================
        FUNCIONES GENERALES
     ========================================================= */
 
     const $ = (id) => document.getElementById(id);
 
+
     function guardarLocalStorage(clave, datos) {
-        localStorage.setItem(clave, JSON.stringify(datos));
+
+        localStorage.setItem(
+            clave,
+            JSON.stringify(datos)
+        );
+
     }
 
-    function cargarLocalStorage(clave, valorInicial = null) {
+
+    function cargarLocalStorage(
+        clave,
+        valorInicial
+    ) {
+
         try {
-            const datos = localStorage.getItem(clave);
+
+            const datos =
+                localStorage.getItem(clave);
 
             if (!datos) {
+
                 return valorInicial;
+
             }
 
             return JSON.parse(datos);
 
         } catch (error) {
-            console.error("Error al cargar:", clave, error);
+
+            console.error(
+                "Error al cargar:",
+                clave,
+                error
+            );
+
             return valorInicial;
+
         }
+
     }
 
+
     function escaparHTML(texto) {
-        if (texto === null || texto === undefined) {
+
+        if (
+            texto === null ||
+            texto === undefined
+        ) {
+
             return "";
+
         }
+
 
         return String(texto)
             .replace(/&/g, "&amp;")
@@ -37,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
+
     }
 
 
@@ -44,125 +77,317 @@ document.addEventListener("DOMContentLoaded", () => {
        DATOS
     ========================================================= */
 
-    let paciente = cargarLocalStorage(
-        "medControl_paciente",
-        {
-            nombre: "",
-            edad: ""
+    let paciente =
+        cargarLocalStorage(
+            "medControl_paciente",
+            {
+                nombre: "",
+                edad: ""
+            }
+        );
+
+
+    let tratamiento =
+        cargarLocalStorage(
+            "medControl_tratamiento",
+            {}
+        );
+
+
+    let medicamentos =
+        cargarLocalStorage(
+            "medControl_medicamentos",
+            []
+        );
+
+
+    let historial =
+        cargarLocalStorage(
+            "medControl_historial",
+            []
+        );
+
+
+    let cumplimiento =
+        cargarLocalStorage(
+            "medControl_cumplimiento",
+            []
+        );
+
+
+    let recetas =
+        cargarLocalStorage(
+            "medControl_recetas",
+            []
+        );
+
+
+    /* =========================================================
+       REFERENCIAS
+    ========================================================= */
+
+    const nombrePaciente =
+        $("nombrePaciente");
+
+    const edadPaciente =
+        $("edadPaciente");
+
+    const btnGuardarPaciente =
+        $("btnGuardarPaciente");
+
+
+    const formTratamiento =
+        $("formTratamiento");
+
+    const historialClinico =
+        $("historialClinico");
+
+    const alergias =
+        $("alergias");
+
+    const medicacionesActuales =
+        $("medicacionesActuales");
+
+    const medicacionesPasadas =
+        $("medicacionesPasadas");
+
+    const resultadosPruebas =
+        $("resultadosPruebas");
+
+    const observaciones =
+        $("observaciones");
+
+    const btnLimpiarTratamiento =
+        $("btnLimpiarTratamiento");
+
+    const resumenClinico =
+        $("resumenClinico");
+
+
+    const formMedicamento =
+        $("formMedicamento");
+
+    const nombreMedicamento =
+        $("nombreMedicamento");
+
+    const dosis =
+        $("dosis");
+
+    const frecuencia =
+        $("frecuencia");
+
+    const fechaInicio =
+        $("fechaInicio");
+
+    const fechaFin =
+        $("fechaFin");
+
+    const actividad =
+        $("actividad");
+
+    const horariosContainer =
+        $("horariosContainer");
+
+    const cantidadMedicamentos =
+        $("cantidadMedicamentos");
+
+    const listaMedicamentos =
+        $("listaMedicamentos");
+
+
+    const historialContainer =
+        $("historial");
+
+
+    const proximaMedicamento =
+        $("proximaMedicamento");
+
+    const proximaHora =
+        $("proximaHora");
+
+    const contador =
+        $("contador");
+
+
+    const modalRecordatorio =
+        $("modalRecordatorio");
+
+    const recordatorioTexto =
+        $("recordatorioTexto");
+
+    const btnTomado =
+        $("btnTomado");
+
+    const btnPosponer =
+        $("btnPosponer");
+
+
+    const resumenCumplimiento =
+        $("resumenCumplimiento");
+
+    const historialCumplimiento =
+        $("historialCumplimiento");
+
+    const porcentajeCumplimiento =
+        $("porcentajeCumplimiento");
+
+    const barraProgresoCumplimiento =
+        $("barraProgresoCumplimiento");
+
+
+    const formReceta =
+        $("formReceta");
+
+    const nombreMedico =
+        $("nombreMedico");
+
+    const numeroReceta =
+        $("numeroReceta");
+
+    const medicamentoReceta =
+        $("medicamentoReceta");
+
+    const fechaReceta =
+        $("fechaReceta");
+
+    const fechaVencimientoReceta =
+        $("fechaVencimientoReceta");
+
+    const diasAvisoReceta =
+        $("diasAvisoReceta");
+
+    const listaRecetas =
+        $("listaRecetas");
+
+
+    const btnNotificaciones =
+        $("btnNotificaciones");
+
+
+    /* =========================================================
+       VARIABLES
+    ========================================================= */
+
+    let medicacionPendienteModal =
+        null;
+
+    let ultimaTomaMostrada =
+        null;
+
+    let tiempoPospuesto =
+        null;
+
+
+    /* =========================================================
+       FECHA LOCAL
+    ========================================================= */
+
+    function fechaLocalISO(
+        fecha = new Date()
+    ) {
+
+        const año =
+            fecha.getFullYear();
+
+        const mes =
+            String(
+                fecha.getMonth() + 1
+            ).padStart(2, "0");
+
+        const dia =
+            String(
+                fecha.getDate()
+            ).padStart(2, "0");
+
+
+        return `${año}-${mes}-${dia}`;
+
+    }
+
+
+    function formatearFecha(fecha) {
+
+        if (!fecha) {
+
+            return "";
+
         }
-    );
-
-    let tratamiento = cargarLocalStorage(
-        "medControl_tratamiento",
-        {}
-    );
-
-    let medicamentos = cargarLocalStorage(
-        "medControl_medicamentos",
-        []
-    );
-
-    let historial = cargarLocalStorage(
-        "medControl_historial",
-        []
-    );
-
-    let cumplimiento = cargarLocalStorage(
-        "medControl_cumplimiento",
-        []
-    );
-
-    let recetas = cargarLocalStorage(
-        "medControl_recetas",
-        []
-    );
 
 
-    /* =========================================================
-       REFERENCIAS HTML
-    ========================================================= */
-
-    // Paciente
-    const nombrePaciente = $("nombrePaciente");
-    const edadPaciente = $("edadPaciente");
-    const btnGuardarPaciente = $("btnGuardarPaciente");
-    const formPaciente = $("formPaciente");
+        const partes =
+            fecha.split("-");
 
 
-    // Tratamiento
-    const formTratamiento = $("formTratamiento");
+        if (
+            partes.length !== 3
+        ) {
 
-    const historialClinico = $("historialClinico");
-    const alergias = $("alergias");
-    const medicacionesActuales = $("medicacionesActuales");
-    const medicacionesPasadas = $("medicacionesPasadas");
-    const resultadosPruebas = $("resultadosPruebas");
-    const observaciones = $("observaciones");
+            return fecha;
 
-    const btnLimpiarTratamiento = $("btnLimpiarTratamiento");
-    const resumenClinico = $("resumenClinico");
+        }
 
 
-    // Medicamentos
-    const formMedicamento = $("formMedicamento");
+        return `${partes[2]}/${partes[1]}/${partes[0]}`;
 
-    const nombreMedicamento = $("nombreMedicamento");
-    const dosis = $("dosis");
-    const frecuencia = $("frecuencia");
-    const fechaInicio = $("fechaInicio");
-    const fechaFin = $("fechaFin");
-    const actividad = $("actividad");
-
-    const horariosContainer = $("horariosContainer");
-
-    const cantidadMedicamentos = $("cantidadMedicamentos");
-    const listaMedicamentos = $("listaMedicamentos");
+    }
 
 
-    // Historial normal
-    const historialContainer = $("historial");
+    function combinarFechaHora(
+        fecha,
+        hora
+    ) {
+
+        if (
+            !fecha ||
+            !hora
+        ) {
+
+            return null;
+
+        }
 
 
-    // Próxima toma
-    const proximaMedicamento = $("proximaMedicamento");
-    const proximaHora = $("proximaHora");
-    const contador = $("contador");
+        const partesFecha =
+            fecha.split("-");
+
+        const partesHora =
+            hora.split(":");
 
 
-    // Modal
-    const modalRecordatorio = $("modalRecordatorio");
-    const recordatorioTexto = $("recordatorioTexto");
-    const btnTomado = $("btnTomado");
-    const btnPosponer = $("btnPosponer");
+        if (
+            partesFecha.length !== 3 ||
+            partesHora.length < 2
+        ) {
+
+            return null;
+
+        }
 
 
-    // Cumplimiento
-    const historialCumplimiento = $("historialCumplimiento");
-    const resumenCumplimiento = $("resumenCumplimiento");
-    const porcentajeCumplimiento = $("porcentajeCumplimiento");
+        return new Date(
+            Number(partesFecha[0]),
+            Number(partesFecha[1]) - 1,
+            Number(partesFecha[2]),
+            Number(partesHora[0]),
+            Number(partesHora[1]),
+            0,
+            0
+        );
+
+    }
 
 
-    // Recetas
-    const formReceta = $("formReceta");
+    function crearClaveToma(
+        medicamentoId,
+        fecha,
+        hora
+    ) {
 
-    const nombreMedico = $("nombreMedico");
-    const numeroReceta = $("numeroReceta");
-    const medicamentoReceta = $("medicamentoReceta");
-    const fechaReceta = $("fechaReceta");
-    const fechaVencimientoReceta = $("fechaVencimientoReceta");
-    const diasAvisoReceta = $("diasAvisoReceta");
+        return (
+            `${medicamentoId}_${fecha}_${hora}`
+        );
 
-    const listaRecetas = $("listaRecetas");
-
-
-    /* =========================================================
-       VARIABLES DEL SISTEMA
-    ========================================================= */
-
-    let medicacionPendienteModal = null;
-    let ultimaTomaMostrada = null;
-
-    let temporizadorRecordatorio = null;
+    }
 
 
     /* =========================================================
@@ -172,67 +397,91 @@ document.addEventListener("DOMContentLoaded", () => {
     function cargarPaciente() {
 
         if (nombrePaciente) {
-            nombrePaciente.value = paciente.nombre || "";
+
+            nombrePaciente.value =
+                paciente.nombre || "";
+
         }
 
+
         if (edadPaciente) {
-            edadPaciente.value = paciente.edad || "";
+
+            edadPaciente.value =
+                paciente.edad || "";
+
         }
+
     }
 
 
     function guardarPaciente() {
 
-        const nombre = nombrePaciente
-            ? nombrePaciente.value.trim()
-            : "";
+        const nombre =
+            nombrePaciente
+                ? nombrePaciente.value.trim()
+                : "";
 
-        const edad = edadPaciente
-            ? edadPaciente.value
-            : "";
+
+        const edad =
+            edadPaciente
+                ? edadPaciente.value
+                : "";
+
 
         if (!nombre) {
-            alert("Ingresa el nombre del paciente.");
+
+            alert(
+                "Ingresa el nombre del paciente."
+            );
+
             return;
+
         }
+
 
         if (!edad) {
-            alert("Ingresa la edad del paciente.");
+
+            alert(
+                "Ingresa la edad del paciente."
+            );
+
             return;
+
         }
 
+
         paciente = {
+
             nombre,
+
             edad
+
         };
+
 
         guardarLocalStorage(
             "medControl_paciente",
             paciente
         );
 
-        alert("Paciente guardado correctamente.");
 
         actualizarResumenClinico();
+
+
+        alert(
+            "Información del paciente guardada correctamente."
+        );
+
     }
 
 
     if (btnGuardarPaciente) {
+
         btnGuardarPaciente.addEventListener(
             "click",
             guardarPaciente
         );
-    }
 
-
-    if (formPaciente) {
-        formPaciente.addEventListener(
-            "submit",
-            (event) => {
-                event.preventDefault();
-                guardarPaciente();
-            }
-        );
     }
 
 
@@ -243,38 +492,59 @@ document.addEventListener("DOMContentLoaded", () => {
     function cargarTratamiento() {
 
         if (!tratamiento) {
+
             tratamiento = {};
+
         }
+
 
         if (historialClinico) {
+
             historialClinico.value =
                 tratamiento.historialClinico || "";
+
         }
+
 
         if (alergias) {
+
             alergias.value =
                 tratamiento.alergias || "";
+
         }
+
 
         if (medicacionesActuales) {
+
             medicacionesActuales.value =
                 tratamiento.medicacionesActuales || "";
+
         }
+
 
         if (medicacionesPasadas) {
+
             medicacionesPasadas.value =
                 tratamiento.medicacionesPasadas || "";
+
         }
+
 
         if (resultadosPruebas) {
+
             resultadosPruebas.value =
                 tratamiento.resultadosPruebas || "";
+
         }
 
+
         if (observaciones) {
+
             observaciones.value =
                 tratamiento.observaciones || "";
+
         }
+
     }
 
 
@@ -285,6 +555,7 @@ document.addEventListener("DOMContentLoaded", () => {
             (event) => {
 
                 event.preventDefault();
+
 
                 tratamiento = {
 
@@ -320,6 +591,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     fechaActualizacion:
                         new Date().toISOString()
+
                 };
 
 
@@ -329,14 +601,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
 
+                actualizarResumenClinico();
+
+
                 alert(
-                    "Información del tratamiento guardada correctamente."
+                    "Registro de tratamiento guardado correctamente."
                 );
 
-
-                actualizarResumenClinico();
             }
         );
+
     }
 
 
@@ -347,47 +621,34 @@ document.addEventListener("DOMContentLoaded", () => {
             () => {
 
                 if (formTratamiento) {
+
                     formTratamiento.reset();
+
                 }
 
             }
         );
+
     }
 
 
     function actualizarResumenClinico() {
 
         if (!resumenClinico) {
-            return;
-        }
-
-        const tienePaciente =
-            paciente &&
-            paciente.nombre;
-
-        const tieneTratamiento =
-            tratamiento &&
-            Object.values(tratamiento).some(
-                valor =>
-                    typeof valor === "string" &&
-                    valor.trim() !== ""
-            );
-
-
-        if (!tienePaciente && !tieneTratamiento) {
-
-            resumenClinico.innerHTML = `
-                <div class="vacio">
-                    <div class="vacio-icon">🏥</div>
-                    <h3>No hay información clínica registrada</h3>
-                    <p>
-                        Completa el registro del paciente y tratamiento.
-                    </p>
-                </div>
-            `;
 
             return;
+
         }
+
+
+        const nombre =
+            paciente.nombre ||
+            "No registrado";
+
+
+        const edad =
+            paciente.edad ||
+            "No registrada";
 
 
         resumenClinico.innerHTML = `
@@ -395,110 +656,177 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="resumen-grid">
 
                 <div class="resumen-item">
-                    <strong>Paciente</strong>
+
+                    <strong>
+                        👤 Paciente
+                    </strong>
+
                     <span>
-                        ${escaparHTML(paciente.nombre || "No registrado")}
+                        ${escaparHTML(nombre)}
                     </span>
+
                 </div>
 
-                <div class="resumen-item">
-                    <strong>Edad</strong>
-                    <span>
-                        ${escaparHTML(paciente.edad || "No registrada")}
-                    </span>
-                </div>
 
                 <div class="resumen-item">
-                    <strong>Historial clínico</strong>
+
+                    <strong>
+                        🎂 Edad
+                    </strong>
+
+                    <span>
+                        ${escaparHTML(edad)}
+                    </span>
+
+                </div>
+
+
+                <div class="resumen-item">
+
+                    <strong>
+                        📋 Historial clínico
+                    </strong>
+
                     <span>
                         ${escaparHTML(
                             tratamiento.historialClinico ||
                             "No registrado"
                         )}
                     </span>
+
                 </div>
 
+
                 <div class="resumen-item">
-                    <strong>Alergias</strong>
+
+                    <strong>
+                        ⚠️ Alergias
+                    </strong>
+
                     <span>
                         ${escaparHTML(
                             tratamiento.alergias ||
                             "No registradas"
                         )}
                     </span>
+
                 </div>
 
+
                 <div class="resumen-item">
-                    <strong>Medicaciones actuales</strong>
+
+                    <strong>
+                        💊 Medicaciones actuales
+                    </strong>
+
                     <span>
                         ${escaparHTML(
                             tratamiento.medicacionesActuales ||
                             "No registradas"
                         )}
                     </span>
+
                 </div>
 
+
                 <div class="resumen-item">
-                    <strong>Medicaciones pasadas</strong>
+
+                    <strong>
+                        💊 Medicaciones pasadas
+                    </strong>
+
                     <span>
                         ${escaparHTML(
                             tratamiento.medicacionesPasadas ||
                             "No registradas"
                         )}
                     </span>
+
                 </div>
 
+
                 <div class="resumen-item">
-                    <strong>Resultados de pruebas</strong>
+
+                    <strong>
+                        🧪 Resultados de pruebas
+                    </strong>
+
                     <span>
                         ${escaparHTML(
                             tratamiento.resultadosPruebas ||
                             "No registrados"
                         )}
                     </span>
+
                 </div>
 
+
                 <div class="resumen-item">
-                    <strong>Observaciones</strong>
+
+                    <strong>
+                        📝 Observaciones
+                    </strong>
+
                     <span>
                         ${escaparHTML(
                             tratamiento.observaciones ||
                             "Sin observaciones"
                         )}
                     </span>
+
                 </div>
 
             </div>
+
         `;
+
     }
 
 
     /* =========================================================
-       HORARIOS SEGÚN FRECUENCIA
+       HORARIOS
     ========================================================= */
 
     function generarHorarios() {
 
-        if (!horariosContainer || !frecuencia) {
+        if (
+            !horariosContainer ||
+            !frecuencia
+        ) {
+
             return;
+
         }
 
-        const valor = frecuencia.value;
 
-        let cantidad = parseInt(valor);
+        let cantidad =
+            parseInt(
+                frecuencia.value
+            );
 
-        if (valor === "personalizado") {
+
+        if (
+            frecuencia.value ===
+            "personalizado"
+        ) {
+
             cantidad = 1;
+
         }
+
 
         if (
             isNaN(cantidad) ||
             cantidad < 1
         ) {
+
             cantidad = 1;
+
         }
 
-        horariosContainer.innerHTML = "";
+
+        horariosContainer.innerHTML =
+            "";
 
 
         for (
@@ -507,14 +835,18 @@ document.addEventListener("DOMContentLoaded", () => {
             i++
         ) {
 
-            const grupo = document.createElement("div");
+            const contenedor =
+                document.createElement("div");
 
-            grupo.className = "campo";
 
-            grupo.innerHTML = `
+            contenedor.className =
+                "horario-item";
+
+
+            contenedor.innerHTML = `
 
                 <label>
-                    ⏰ Hora ${i + 1}
+                    Hora ${i + 1}
                 </label>
 
                 <input
@@ -525,8 +857,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
             `;
 
-            horariosContainer.appendChild(grupo);
+
+            horariosContainer.appendChild(
+                contenedor
+            );
+
         }
+
     }
 
 
@@ -541,7 +878,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-       AGREGAR MEDICAMENTO
+       MEDICAMENTOS
     ========================================================= */
 
     if (formMedicamento) {
@@ -554,42 +891,75 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                 const nombre =
-                    nombreMedicamento
-                        ? nombreMedicamento.value.trim()
-                        : "";
+                    nombreMedicamento.value.trim();
+
 
                 const dosisValor =
-                    dosis
-                        ? dosis.value.trim()
-                        : "";
+                    dosis.value.trim();
+
 
                 const inicio =
-                    fechaInicio
-                        ? fechaInicio.value
-                        : "";
+                    fechaInicio.value;
+
 
                 const fin =
-                    fechaFin
-                        ? fechaFin.value
-                        : "";
+                    fechaFin.value;
+
+
+                const valorFrecuencia =
+                    frecuencia.value;
+
+
+                const actividadValor =
+                    actividad
+                        ? actividad.value
+                        : "Sin actividad";
 
 
                 if (!nombre) {
-                    alert("Ingresa el nombre del medicamento.");
-                    return;
-                }
 
-                if (!dosisValor) {
-                    alert("Ingresa la dosis.");
-                    return;
-                }
-
-                if (!inicio || !fin) {
                     alert(
-                        "Debes indicar la fecha de inicio y finalización."
+                        "Ingresa el nombre del medicamento."
                     );
 
                     return;
+
+                }
+
+
+                if (!dosisValor) {
+
+                    alert(
+                        "Ingresa la dosis."
+                    );
+
+                    return;
+
+                }
+
+
+                if (!valorFrecuencia) {
+
+                    alert(
+                        "Selecciona la frecuencia."
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    !inicio ||
+                    !fin
+                ) {
+
+                    alert(
+                        "Ingresa las fechas del tratamiento."
+                    );
+
+                    return;
+
                 }
 
 
@@ -600,28 +970,36 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
 
                     return;
+
                 }
 
 
-                const inputsHora =
-                    document.querySelectorAll(
-                        ".horaMedicamento"
+                const horas =
+                    Array.from(
+                        document.querySelectorAll(
+                            ".horaMedicamento"
+                        )
+                    )
+                    .map(
+                        input =>
+                            input.value
+                    )
+                    .filter(
+                        hora =>
+                            hora !== ""
                     );
 
 
-                const horarios =
-                    Array.from(inputsHora)
-                        .map(input => input.value)
-                        .filter(hora => hora);
-
-
-                if (horarios.length === 0) {
+                if (
+                    horas.length === 0
+                ) {
 
                     alert(
                         "Debes agregar al menos un horario."
                     );
 
                     return;
+
                 }
 
 
@@ -632,26 +1010,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     nombre,
 
-                    dosis: dosisValor,
+                    dosis:
+                        dosisValor,
 
                     frecuencia:
-                        frecuencia
-                            ? frecuencia.value
-                            : "1",
+                        valorFrecuencia,
 
-                    fechaInicio: inicio,
+                    fechaInicio:
+                        inicio,
 
-                    fechaFin: fin,
+                    fechaFin:
+                        fin,
 
                     actividad:
-                        actividad
-                            ? actividad.value
-                            : "",
+                        actividadValor,
 
-                    horarios,
+                    horarios:
+                        horas,
 
                     fechaRegistro:
                         new Date().toISOString()
+
                 };
 
 
@@ -666,9 +1045,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
 
-                if (formMedicamento) {
-                    formMedicamento.reset();
-                }
+                formMedicamento.reset();
 
 
                 generarHorarios();
@@ -680,118 +1057,192 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 actualizarProximaToma();
 
+
                 alert(
-                    "Medicamento programado correctamente."
+                    "Tratamiento programado correctamente."
                 );
+
             }
         );
+
     }
 
 
     /* =========================================================
-       RENDERIZAR MEDICAMENTOS
+       MOSTRAR MEDICAMENTOS
     ========================================================= */
 
     function renderizarMedicamentos() {
 
         if (!listaMedicamentos) {
+
             return;
+
         }
 
 
         if (cantidadMedicamentos) {
+
             cantidadMedicamentos.textContent =
                 medicamentos.length;
+
         }
 
 
-        if (medicamentos.length === 0) {
+        if (
+            medicamentos.length === 0
+        ) {
 
             listaMedicamentos.innerHTML = `
 
                 <div class="vacio">
 
-                    <div class="vacio-icon">💊</div>
+                    <div class="vacio-icon">
+                        💊
+                    </div>
 
-                    <h3>No hay medicamentos programados</h3>
+                    <h3>
+                        No hay tratamientos
+                    </h3>
 
                     <p>
                         Agrega un medicamento para comenzar.
                     </p>
 
                 </div>
+
             `;
 
             return;
+
         }
 
 
         listaMedicamentos.innerHTML =
-            medicamentos.map(med => `
+            medicamentos
+                .map(med => `
 
-                <div class="medicamento-card">
+                    <div class="medicamento-card">
 
-                    <div class="medicamento-header">
+                        <div class="medicamento-header">
 
-                        <div>
+                            <div>
 
-                            <h3>
-                                💊 ${escaparHTML(med.nombre)}
-                            </h3>
+                                <h3>
+                                    💊
+                                    ${escaparHTML(
+                                        med.nombre
+                                    )}
+                                </h3>
 
-                            <p>
-                                Dosis:
-                                ${escaparHTML(med.dosis)}
-                            </p>
+                                <p>
+                                    Dosis:
+                                    ${escaparHTML(
+                                        med.dosis
+                                    )}
+                                </p>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                class="btn btn-danger btn-eliminar-medicamento"
+                                data-id="${med.id}"
+                            >
+                                🗑️
+                            </button>
 
                         </div>
 
-                        <button
-                            class="btn btn-danger btn-eliminar-medicamento"
-                            data-id="${med.id}"
-                            type="button"
-                        >
-                            🗑️
-                        </button>
+
+                        <div class="medicamento-info">
+
+                            <div>
+
+                                <strong>
+                                    📅 Inicio
+                                </strong>
+
+                                <span>
+                                    ${formatearFecha(
+                                        med.fechaInicio
+                                    )}
+                                </span>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    📅 Finalización
+                                </strong>
+
+                                <span>
+                                    ${formatearFecha(
+                                        med.fechaFin
+                                    )}
+                                </span>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    ⏰ Horarios
+                                </strong>
+
+                                <span>
+                                    ${med.horarios
+                                        .map(
+                                            h =>
+                                                escaparHTML(h)
+                                        )
+                                        .join(", ")
+                                    }
+                                </span>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    🔄 Frecuencia
+                                </strong>
+
+                                <span>
+                                    ${obtenerTextoFrecuencia(
+                                        med.frecuencia
+                                    )}
+                                </span>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    📌 Actividad
+                                </strong>
+
+                                <span>
+                                    ${escaparHTML(
+                                        med.actividad ||
+                                        "Sin actividad"
+                                    )}
+                                </span>
+
+                            </div>
+
+                        </div>
 
                     </div>
 
-
-                    <div class="medicamento-info">
-
-                        <div>
-                            <strong>📅 Inicio</strong>
-                            <span>${formatearFecha(med.fechaInicio)}</span>
-                        </div>
-
-                        <div>
-                            <strong>📅 Fin</strong>
-                            <span>${formatearFecha(med.fechaFin)}</span>
-                        </div>
-
-                        <div>
-                            <strong>⏰ Horarios</strong>
-                            <span>
-                                ${med.horarios
-                                    .map(h => escaparHTML(h))
-                                    .join(", ")}
-                            </span>
-                        </div>
-
-                        <div>
-                            <strong>🔄 Frecuencia</strong>
-                            <span>
-                                ${escaparHTML(
-                                    med.frecuencia
-                                )}
-                            </span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            `).join("");
+                `)
+                .join("");
 
 
         document
@@ -804,14 +1255,48 @@ document.addEventListener("DOMContentLoaded", () => {
                     "click",
                     () => {
 
-                        const id =
-                            boton.dataset.id;
+                        eliminarMedicamento(
+                            boton.dataset.id
+                        );
 
-                        eliminarMedicamento(id);
                     }
                 );
 
             });
+
+    }
+
+
+    function obtenerTextoFrecuencia(
+        valor
+    ) {
+
+        const frecuencias = {
+
+            "1":
+                "Una vez al día",
+
+            "2":
+                "Dos veces al día",
+
+            "3":
+                "Tres veces al día",
+
+            "4":
+                "Cuatro veces al día",
+
+            "personalizado":
+                "Personalizada"
+
+        };
+
+
+        return (
+            frecuencias[valor] ||
+            valor ||
+            "No especificada"
+        );
+
     }
 
 
@@ -819,29 +1304,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const medicamento =
             medicamentos.find(
-                med => med.id === id
+                med =>
+                    med.id === id
             );
 
 
         if (!medicamento) {
+
             return;
+
         }
 
 
         const confirmar =
             confirm(
-                `¿Deseas eliminar el medicamento "${medicamento.nombre}"?`
+                `¿Deseas eliminar "${medicamento.nombre}"?`
             );
 
 
         if (!confirmar) {
+
             return;
+
         }
 
 
         medicamentos =
             medicamentos.filter(
-                med => med.id !== id
+                med =>
+                    med.id !== id
+            );
+
+
+        cumplimiento =
+            cumplimiento.filter(
+                registro =>
+                    registro.medicamentoId !== id
             );
 
 
@@ -849,14 +1347,6 @@ document.addEventListener("DOMContentLoaded", () => {
             "medControl_medicamentos",
             medicamentos
         );
-
-
-        // También eliminamos registros de cumplimiento
-        cumplimiento =
-            cumplimiento.filter(
-                registro =>
-                    registro.medicamentoId !== id
-            );
 
 
         guardarLocalStorage(
@@ -867,104 +1357,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         renderizarMedicamentos();
 
-        actualizarHistorialCumplimiento();
+        renderizarCumplimiento();
 
         actualizarProximaToma();
-    }
 
-
-    /* =========================================================
-       FECHAS
-    ========================================================= */
-
-    function fechaLocalISO(fecha = new Date()) {
-
-        const año =
-            fecha.getFullYear();
-
-        const mes =
-            String(
-                fecha.getMonth() + 1
-            ).padStart(2, "0");
-
-        const dia =
-            String(
-                fecha.getDate()
-            ).padStart(2, "0");
-
-
-        return `${año}-${mes}-${dia}`;
-    }
-
-
-    function formatearFecha(fecha) {
-
-        if (!fecha) {
-            return "";
-        }
-
-
-        const partes =
-            fecha.split("-");
-
-
-        if (partes.length !== 3) {
-            return fecha;
-        }
-
-
-        return `${partes[2]}/${partes[1]}/${partes[0]}`;
-    }
-
-
-    function combinarFechaHora(
-        fecha,
-        hora
-    ) {
-
-        if (!fecha || !hora) {
-            return null;
-        }
-
-
-        const partesFecha =
-            fecha.split("-");
-
-        const partesHora =
-            hora.split(":");
-
-
-        if (
-            partesFecha.length !== 3 ||
-            partesHora.length < 2
-        ) {
-            return null;
-        }
-
-
-        const fechaObjeto =
-            new Date(
-                Number(partesFecha[0]),
-                Number(partesFecha[1]) - 1,
-                Number(partesFecha[2]),
-                Number(partesHora[0]),
-                Number(partesHora[1]),
-                0,
-                0
-            );
-
-
-        return fechaObjeto;
-    }
-
-
-    function crearClaveToma(
-        medicamentoId,
-        fecha,
-        hora
-    ) {
-
-        return `${medicamentoId}_${fecha}_${hora}`;
     }
 
 
@@ -976,224 +1372,249 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const resultado = [];
 
-        const ahora = new Date();
-
-        const hoyISO =
-            fechaLocalISO(ahora);
+        const ahora =
+            new Date();
 
 
-        medicamentos.forEach(med => {
+        medicamentos.forEach(
+            med => {
 
-            if (
-                !med.fechaInicio ||
-                !med.fechaFin ||
-                !Array.isArray(med.horarios)
-            ) {
-                return;
-            }
+                if (
+                    !med.fechaInicio ||
+                    !med.fechaFin ||
+                    !Array.isArray(
+                        med.horarios
+                    )
+                ) {
 
+                    return;
 
-            const inicio =
-                new Date(
-                    `${med.fechaInicio}T00:00:00`
-                );
-
-            const fin =
-                new Date(
-                    `${med.fechaFin}T23:59:59`
-                );
+                }
 
 
-            let fechaActual =
-                new Date(inicio);
-
-
-            while (
-                fechaActual <= fin
-            ) {
-
-                const fechaISO =
-                    fechaLocalISO(
-                        fechaActual
+                const inicio =
+                    new Date(
+                        `${med.fechaInicio}T00:00:00`
                     );
 
 
-                med.horarios.forEach(hora => {
+                const fin =
+                    new Date(
+                        `${med.fechaFin}T23:59:59`
+                    );
 
-                    const fechaHora =
-                        combinarFechaHora(
-                            fechaISO,
-                            hora
+
+                const fechaActual =
+                    new Date(inicio);
+
+
+                while (
+                    fechaActual <= fin
+                ) {
+
+                    const fecha =
+                        fechaLocalISO(
+                            fechaActual
                         );
 
 
-                    if (!fechaHora) {
-                        return;
-                    }
+                    med.horarios.forEach(
+                        hora => {
+
+                            const fechaHora =
+                                combinarFechaHora(
+                                    fecha,
+                                    hora
+                                );
 
 
-                    let estado =
-                        "pendiente";
+                            if (!fechaHora) {
+
+                                return;
+
+                            }
 
 
-                    if (
-                        fechaHora <= ahora
-                    ) {
-
-                        estado =
-                            "omitido";
-                    }
-
-
-                    const clave =
-                        crearClaveToma(
-                            med.id,
-                            fechaISO,
-                            hora
-                        );
+                            const clave =
+                                crearClaveToma(
+                                    med.id,
+                                    fecha,
+                                    hora
+                                );
 
 
-                    const registroExistente =
-                        cumplimiento.find(
-                            item =>
-                                item.clave === clave
-                        );
+                            const registro =
+                                cumplimiento.find(
+                                    item =>
+                                        item.clave ===
+                                        clave
+                                );
 
 
-                    if (
-                        registroExistente &&
-                        registroExistente.estado === "tomado"
-                    ) {
-
-                        estado = "tomado";
-                    }
+                            let estado =
+                                "pendiente";
 
 
-                    resultado.push({
+                            if (
+                                fechaHora <=
+                                ahora
+                            ) {
 
-                        clave,
+                                estado =
+                                    "omitido";
 
-                        medicamentoId:
-                            med.id,
-
-                        medicamento:
-                            med.nombre,
-
-                        dosis:
-                            med.dosis,
-
-                        fecha:
-                            fechaISO,
-
-                        hora,
-
-                        fechaHora,
-
-                        estado
-
-                    });
-
-                });
+                            }
 
 
-                fechaActual.setDate(
-                    fechaActual.getDate() + 1
-                );
+                            if (
+                                registro &&
+                                registro.estado ===
+                                "tomado"
+                            ) {
+
+                                estado =
+                                    "tomado";
+
+                            }
+
+
+                            resultado.push({
+
+                                clave,
+
+                                medicamentoId:
+                                    med.id,
+
+                                medicamento:
+                                    med.nombre,
+
+                                dosis:
+                                    med.dosis,
+
+                                fecha,
+
+                                hora,
+
+                                fechaHora,
+
+                                estado
+
+                            });
+
+                        }
+                    );
+
+
+                    fechaActual.setDate(
+                        fechaActual.getDate() + 1
+                    );
+
+                }
+
             }
-
-        });
+        );
 
 
         return resultado;
+
     }
 
 
     /* =========================================================
-       ACTUALIZAR HISTORIAL DE CUMPLIMIENTO
+       ACTUALIZAR CUMPLIMIENTO
     ========================================================= */
 
     function actualizarHistorialCumplimiento() {
+
+        const ahora =
+            new Date();
+
 
         const tomas =
             obtenerTomasProgramadas();
 
 
-        const ahora =
-            new Date();
+        tomas.forEach(
+            toma => {
+
+                /*
+                 * Las tomas futuras no se registran
+                 * como omitidas.
+                 */
+
+                if (
+                    toma.fechaHora >
+                    ahora
+                ) {
+
+                    return;
+
+                }
 
 
-        /*
-         * Recorremos únicamente las tomas
-         * que ya deberían haberse realizado.
-         */
+                const existente =
+                    cumplimiento.find(
+                        registro =>
+                            registro.clave ===
+                            toma.clave
+                    );
 
-        tomas.forEach(toma => {
 
-            if (
-                toma.fechaHora > ahora
-            ) {
-                return;
+                /*
+                 * Si ya está tomada,
+                 * se conserva.
+                 */
+
+                if (
+                    existente &&
+                    existente.estado ===
+                    "tomado"
+                ) {
+
+                    return;
+
+                }
+
+
+                /*
+                 * Si ya pasó la hora y nunca se
+                 * registró, queda como omitida.
+                 */
+
+                if (!existente) {
+
+                    cumplimiento.push({
+
+                        clave:
+                            toma.clave,
+
+                        medicamentoId:
+                            toma.medicamentoId,
+
+                        medicamento:
+                            toma.medicamento,
+
+                        dosis:
+                            toma.dosis,
+
+                        fecha:
+                            toma.fecha,
+
+                        hora:
+                            toma.hora,
+
+                        estado:
+                            "omitido",
+
+                        fechaRegistro:
+                            new Date().toISOString()
+
+                    });
+
+                }
+
             }
-
-
-            const existente =
-                cumplimiento.find(
-                    registro =>
-                        registro.clave === toma.clave
-                );
-
-
-            /*
-             * Si ya está registrada como tomada,
-             * no hacemos nada.
-             */
-
-            if (
-                existente &&
-                existente.estado === "tomado"
-            ) {
-                return;
-            }
-
-
-            /*
-             * Si no existe, la registramos
-             * como omitida porque ya pasó
-             * su horario.
-             */
-
-            if (!existente) {
-
-                cumplimiento.push({
-
-                    clave:
-                        toma.clave,
-
-                    medicamentoId:
-                        toma.medicamentoId,
-
-                    medicamento:
-                        toma.medicamento,
-
-                    dosis:
-                        toma.dosis,
-
-                    fecha:
-                        toma.fecha,
-
-                    hora:
-                        toma.hora,
-
-                    estado:
-                        "omitido",
-
-                    fechaRegistro:
-                        new Date().toISOString()
-                });
-
-            }
-
-        });
+        );
 
 
         guardarLocalStorage(
@@ -1203,157 +1624,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         renderizarCumplimiento();
+
     }
 
 
     /* =========================================================
-       REGISTRAR TOMA CUMPLIDA
-    ========================================================= */
-
-    function registrarTomaCumplida(toma) {
-
-        if (!toma) {
-            return;
-        }
-
-
-        const ahora =
-            new Date();
-
-
-        const existente =
-            cumplimiento.find(
-                registro =>
-                    registro.clave === toma.clave
-            );
-
-
-        /*
-         * Si ya fue tomada, no se duplica.
-         */
-
-        if (
-            existente &&
-            existente.estado === "tomado"
-        ) {
-
-            alert(
-                "Esta toma ya fue registrada."
-            );
-
-            return;
-        }
-
-
-        /*
-         * Si existía como omitida,
-         * la cambiamos a tomada.
-         */
-
-        if (existente) {
-
-            existente.estado =
-                "tomado";
-
-            existente.fechaToma =
-                ahora.toISOString();
-
-        } else {
-
-            cumplimiento.push({
-
-                clave:
-                    toma.clave,
-
-                medicamentoId:
-                    toma.medicamentoId,
-
-                medicamento:
-                    toma.medicamento,
-
-                dosis:
-                    toma.dosis,
-
-                fecha:
-                    toma.fecha,
-
-                hora:
-                    toma.hora,
-
-                estado:
-                    "tomado",
-
-                fechaToma:
-                    ahora.toISOString(),
-
-                fechaRegistro:
-                    ahora.toISOString()
-            });
-
-        }
-
-
-        guardarLocalStorage(
-            "medControl_cumplimiento",
-            cumplimiento
-        );
-
-
-        /*
-         * También guardamos en el historial
-         * general de tomas.
-         */
-
-        historial.push({
-
-            id:
-                Date.now().toString(),
-
-            medicamentoId:
-                toma.medicamentoId,
-
-            medicamento:
-                toma.medicamento,
-
-            dosis:
-                toma.dosis,
-
-            fechaProgramada:
-                toma.fecha,
-
-            horaProgramada:
-                toma.hora,
-
-            fechaToma:
-                ahora.toISOString(),
-
-            estado:
-                "tomado"
-
-        });
-
-
-        guardarLocalStorage(
-            "medControl_historial",
-            historial
-        );
-
-
-        renderizarHistorial();
-
-        renderizarCumplimiento();
-
-        actualizarProximaToma();
-
-
-        alert(
-            `Toma registrada correctamente: ${toma.medicamento}`
-        );
-    }
-
-
-    /* =========================================================
-       CALCULAR ESTADÍSTICAS DE CUMPLIMIENTO
+       ESTADÍSTICAS DE CUMPLIMIENTO
     ========================================================= */
 
     function obtenerEstadisticasCumplimiento() {
@@ -1362,62 +1638,69 @@ document.addEventListener("DOMContentLoaded", () => {
             new Date();
 
 
-        let totalEvaluadas = 0;
-
-        let totalTomadas = 0;
-
-        let totalOmitidas = 0;
-
-        let totalPendientes = 0;
-
-
         const tomas =
             obtenerTomasProgramadas();
 
 
-        tomas.forEach(toma => {
+        let tomadas = 0;
 
-            if (
-                toma.fechaHora > ahora
-            ) {
+        let omitidas = 0;
 
-                totalPendientes++;
+        let pendientes = 0;
 
-                return;
+
+        tomas.forEach(
+            toma => {
+
+                if (
+                    toma.fechaHora >
+                    ahora
+                ) {
+
+                    pendientes++;
+
+                    return;
+
+                }
+
+
+                const registro =
+                    cumplimiento.find(
+                        item =>
+                            item.clave ===
+                            toma.clave
+                    );
+
+
+                if (
+                    registro &&
+                    registro.estado ===
+                    "tomado"
+                ) {
+
+                    tomadas++;
+
+                } else {
+
+                    omitidas++;
+
+                }
+
             }
+        );
 
 
-            totalEvaluadas++;
-
-
-            const registro =
-                cumplimiento.find(
-                    item =>
-                        item.clave === toma.clave
-                );
-
-
-            if (
-                registro &&
-                registro.estado === "tomado"
-            ) {
-
-                totalTomadas++;
-
-            } else {
-
-                totalOmitidas++;
-            }
-
-        });
+        const evaluadas =
+            tomadas +
+            omitidas;
 
 
         const porcentaje =
-            totalEvaluadas > 0
+            evaluadas > 0
                 ? Math.round(
                     (
-                        totalTomadas /
-                        totalEvaluadas
+                        tomadas /
+                        evaluadas
                     ) * 100
                 )
                 : 0;
@@ -1428,20 +1711,18 @@ document.addEventListener("DOMContentLoaded", () => {
             total:
                 tomas.length,
 
-            evaluadas:
-                totalEvaluadas,
+            evaluadas,
 
-            tomadas:
-                totalTomadas,
+            tomadas,
 
-            omitidas:
-                totalOmitidas,
+            omitidas,
 
-            pendientes:
-                totalPendientes,
+            pendientes,
 
             porcentaje
+
         };
+
     }
 
 
@@ -1451,12 +1732,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function renderizarCumplimiento() {
 
+        if (
+            !historialCumplimiento
+        ) {
+
+            return;
+
+        }
+
+
         const estadisticas =
             obtenerEstadisticasCumplimiento();
 
 
         /*
-         * Resumen general.
+         * RESUMEN GENERAL
          */
 
         if (resumenCumplimiento) {
@@ -1470,7 +1760,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </strong>
 
                     <span>
-                        Tomas evaluadas
+                        Evaluadas
                     </span>
 
                 </div>
@@ -1515,6 +1805,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
             `;
+
         }
 
 
@@ -1522,29 +1813,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
             porcentajeCumplimiento.textContent =
                 `${estadisticas.porcentaje}%`;
+
         }
 
 
-        if (!historialCumplimiento) {
-            return;
+        if (
+            barraProgresoCumplimiento
+        ) {
+
+            barraProgresoCumplimiento.style.width =
+                `${estadisticas.porcentaje}%`;
+
         }
 
 
-        if (medicamentos.length === 0) {
+        if (
+            medicamentos.length === 0
+        ) {
 
             historialCumplimiento.innerHTML = `
 
                 <div class="vacio">
 
-                    <div class="vacio-icon">📈</div>
+                    <div class="vacio-icon">
+                        📈
+                    </div>
 
                     <h3>
                         No hay historial de cumplimiento
                     </h3>
 
                     <p>
-                        Programa un medicamento para comenzar
-                        a registrar el cumplimiento.
+                        Programa un medicamento para comenzar.
                     </p>
 
                 </div>
@@ -1552,296 +1852,491 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
 
             return;
+
         }
 
 
-        /*
-         * Estadísticas individuales.
-         */
+        const ahora =
+            new Date();
 
-        const bloques =
-            medicamentos.map(med => {
 
-                const tomasMed =
-                    obtenerTomasProgramadas()
-                        .filter(
+        const todasLasTomas =
+            obtenerTomasProgramadas();
+
+
+        historialCumplimiento.innerHTML =
+            medicamentos
+                .map(med => {
+
+                    const tomasMed =
+                        todasLasTomas.filter(
                             toma =>
-                                toma.medicamentoId === med.id
+                                toma.medicamentoId ===
+                                med.id
                         );
 
 
-                let tomadas = 0;
+                    let tomadas = 0;
 
-                let omitidas = 0;
+                    let omitidas = 0;
 
-                let pendientes = 0;
-
-
-                const ahora =
-                    new Date();
+                    let pendientes = 0;
 
 
-                tomasMed.forEach(toma => {
+                    tomasMed.forEach(
+                        toma => {
 
-                    if (
-                        toma.fechaHora > ahora
-                    ) {
+                            if (
+                                toma.fechaHora >
+                                ahora
+                            ) {
 
-                        pendientes++;
+                                pendientes++;
 
-                        return;
-                    }
+                                return;
 
+                            }
 
-                    const registro =
-                        cumplimiento.find(
-                            item =>
-                                item.clave === toma.clave
-                        );
-
-
-                    if (
-                        registro &&
-                        registro.estado === "tomado"
-                    ) {
-
-                        tomadas++;
-
-                    } else {
-
-                        omitidas++;
-                    }
-
-                });
-
-
-                const evaluadas =
-                    tomadas + omitidas;
-
-
-                const porcentaje =
-                    evaluadas > 0
-                        ? Math.round(
-                            (
-                                tomadas /
-                                evaluadas
-                            ) * 100
-                        )
-                        : 0;
-
-
-                /*
-                 * Historial detallado.
-                 */
-
-                const historialMed =
-                    tomasMed
-                        .sort(
-                            (a, b) =>
-                                a.fechaHora - b.fechaHora
-                        )
-                        .map(toma => {
 
                             const registro =
                                 cumplimiento.find(
                                     item =>
-                                        item.clave === toma.clave
+                                        item.clave ===
+                                        toma.clave
                                 );
-
-
-                            let estado =
-                                "pendiente";
 
 
                             if (
                                 registro &&
-                                registro.estado === "tomado"
+                                registro.estado ===
+                                "tomado"
                             ) {
 
-                                estado = "tomado";
+                                tomadas++;
 
-                            } else if (
-                                toma.fechaHora <
-                                new Date()
-                            ) {
+                            } else {
 
-                                estado = "omitido";
+                                omitidas++;
+
                             }
 
-
-                            let clase =
-                                "estado-pendiente";
-
-                            let texto =
-                                "Pendiente";
+                        }
+                    );
 
 
-                            if (
-                                estado === "tomado"
-                            ) {
-
-                                clase =
-                                    "estado-tomado";
-
-                                texto =
-                                    "Tomado";
-
-                            } else if (
-                                estado === "omitido"
-                            ) {
-
-                                clase =
-                                    "estado-omitido";
-
-                                texto =
-                                    "Omitido";
-                            }
+                    const evaluadas =
+                        tomadas +
+                        omitidas;
 
 
-                            return `
-
-                                <div class="cumplimiento-historial-item">
-
-                                    <div>
-
-                                        <strong>
-                                            ${formatearFecha(toma.fecha)}
-                                        </strong>
-
-                                        <span>
-                                            ${escaparHTML(toma.hora)}
-                                        </span>
-
-                                    </div>
+                    const porcentaje =
+                        evaluadas > 0
+                            ? Math.round(
+                                (
+                                    tomadas /
+                                    evaluadas
+                                ) * 100
+                            )
+                            : 0;
 
 
-                                    <span class="${clase}">
-                                        ${texto}
+                    const historialHTML =
+                        tomasMed
+                            .sort(
+                                (a, b) =>
+                                    a.fechaHora -
+                                    b.fechaHora
+                            )
+                            .map(
+                                toma => {
+
+                                    const registro =
+                                        cumplimiento.find(
+                                            item =>
+                                                item.clave ===
+                                                toma.clave
+                                        );
+
+
+                                    let estado =
+                                        "pendiente";
+
+
+                                    if (
+                                        registro &&
+                                        registro.estado ===
+                                        "tomado"
+                                    ) {
+
+                                        estado =
+                                            "tomado";
+
+                                    } else if (
+                                        toma.fechaHora <=
+                                        ahora
+                                    ) {
+
+                                        estado =
+                                            "omitido";
+
+                                    }
+
+
+                                    let clase =
+                                        "estado-pendiente";
+
+                                    let texto =
+                                        "Pendiente";
+
+
+                                    if (
+                                        estado ===
+                                        "tomado"
+                                    ) {
+
+                                        clase =
+                                            "estado-tomado";
+
+                                        texto =
+                                            "Tomado";
+
+                                    }
+
+
+                                    if (
+                                        estado ===
+                                        "omitido"
+                                    ) {
+
+                                        clase =
+                                            "estado-omitido";
+
+                                        texto =
+                                            "Omitido";
+
+                                    }
+
+
+                                    return `
+
+                                        <div class="cumplimiento-historial-item">
+
+                                            <div>
+
+                                                <strong>
+                                                    ${formatearFecha(
+                                                        toma.fecha
+                                                    )}
+                                                </strong>
+
+                                                <span>
+                                                    ${escaparHTML(
+                                                        toma.hora
+                                                    )}
+                                                </span>
+
+                                            </div>
+
+
+                                            <span
+                                                class="${clase}"
+                                            >
+                                                ${texto}
+                                            </span>
+
+                                        </div>
+
+                                    `;
+
+                                }
+                            )
+                            .join("");
+
+
+                    return `
+
+                        <div
+                            class="cumplimiento-medicamento"
+                        >
+
+                            <div
+                                class="cumplimiento-medicamento-header"
+                            >
+
+                                <div>
+
+                                    <h3>
+                                        💊
+                                        ${escaparHTML(
+                                            med.nombre
+                                        )}
+                                    </h3>
+
+                                    <p>
+                                        Dosis:
+                                        ${escaparHTML(
+                                            med.dosis
+                                        )}
+                                    </p>
+
+                                </div>
+
+
+                                <strong>
+                                    ${porcentaje}%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="barra-progreso">
+
+                                <span
+                                    class="barra-cumplimiento"
+                                    style="
+                                        width:
+                                        ${porcentaje}%;
+                                    "
+                                ></span>
+
+                            </div>
+
+
+                            <div
+                                class="cumplimiento-detalles"
+                            >
+
+                                <div
+                                    class="cumplimiento-detalle"
+                                >
+
+                                    <strong>
+                                        ${evaluadas}
+                                    </strong>
+
+                                    <span>
+                                        Evaluadas
                                     </span>
 
                                 </div>
 
-                            `;
 
-                        })
-                        .join("");
+                                <div
+                                    class="cumplimiento-detalle"
+                                >
 
+                                    <strong>
+                                        ${tomadas}
+                                    </strong>
 
-                return `
+                                    <span>
+                                        Tomadas
+                                    </span>
 
-                    <div class="cumplimiento-medicamento">
-
-                        <div class="cumplimiento-medicamento-header">
-
-                            <div>
-
-                                <h3>
-                                    💊 ${escaparHTML(med.nombre)}
-                                </h3>
-
-                                <p>
-                                    Dosis:
-                                    ${escaparHTML(med.dosis)}
-                                </p>
-
-                            </div>
+                                </div>
 
 
-                            <strong>
-                                ${porcentaje}%
-                            </strong>
+                                <div
+                                    class="cumplimiento-detalle"
+                                >
 
-                        </div>
+                                    <strong>
+                                        ${omitidas}
+                                    </strong>
 
+                                    <span>
+                                        Omitidas
+                                    </span>
 
-                        <div class="barra-progreso">
-
-                            <span
-                                class="barra-cumplimiento"
-                                style="width: ${porcentaje}%"
-                            ></span>
-
-                        </div>
+                                </div>
 
 
-                        <div class="cumplimiento-detalles">
+                                <div
+                                    class="cumplimiento-detalle"
+                                >
 
-                            <div class="cumplimiento-detalle">
+                                    <strong>
+                                        ${pendientes}
+                                    </strong>
 
-                                <strong>
-                                    ${evaluadas}
-                                </strong>
+                                    <span>
+                                        Pendientes
+                                    </span>
 
-                                <span>
-                                    Evaluadas
-                                </span>
+                                </div>
 
                             </div>
 
 
-                            <div class="cumplimiento-detalle">
+                            <div
+                                class="cumplimiento-historial"
+                            >
 
-                                <strong>
-                                    ${tomadas}
-                                </strong>
-
-                                <span>
-                                    Tomadas
-                                </span>
-
-                            </div>
-
-
-                            <div class="cumplimiento-detalle">
-
-                                <strong>
-                                    ${omitidas}
-                                </strong>
-
-                                <span>
-                                    Omitidas
-                                </span>
-
-                            </div>
-
-
-                            <div class="cumplimiento-detalle">
-
-                                <strong>
-                                    ${pendientes}
-                                </strong>
-
-                                <span>
-                                    Pendientes
-                                </span>
+                                ${
+                                    historialHTML ||
+                                    "<p>No hay registros.</p>"
+                                }
 
                             </div>
 
                         </div>
 
+                    `;
 
-                        <div class="cumplimiento-historial">
+                })
+                .join("");
 
-                            ${
-                                historialMed ||
-                                `
-                                <p>
-                                    No hay registros.
-                                </p>
-                                `
-                            }
-
-                        </div>
-
-                    </div>
-
-                `;
-
-            }).join("");
+    }
 
 
-        historialCumplimiento.innerHTML =
-            bloques;
+    /* =========================================================
+       REGISTRAR TOMA COMO TOMADA
+    ========================================================= */
+
+    function registrarTomaCumplida(
+        toma
+    ) {
+
+        if (!toma) {
+
+            return;
+
+        }
+
+
+        const ahora =
+            new Date();
+
+
+        const existente =
+            cumplimiento.find(
+                registro =>
+                    registro.clave ===
+                    toma.clave
+            );
+
+
+        if (
+            existente &&
+            existente.estado ===
+            "tomado"
+        ) {
+
+            alert(
+                "Esta toma ya fue registrada."
+            );
+
+            return;
+
+        }
+
+
+        if (existente) {
+
+            existente.estado =
+                "tomado";
+
+            existente.fechaToma =
+                ahora.toISOString();
+
+        } else {
+
+            cumplimiento.push({
+
+                clave:
+                    toma.clave,
+
+                medicamentoId:
+                    toma.medicamentoId,
+
+                medicamento:
+                    toma.medicamento,
+
+                dosis:
+                    toma.dosis,
+
+                fecha:
+                    toma.fecha,
+
+                hora:
+                    toma.hora,
+
+                estado:
+                    "tomado",
+
+                fechaToma:
+                    ahora.toISOString(),
+
+                fechaRegistro:
+                    ahora.toISOString()
+
+            });
+
+        }
+
+
+        guardarLocalStorage(
+            "medControl_cumplimiento",
+            cumplimiento
+        );
+
+
+        /*
+         * Historial general.
+         */
+
+        historial.push({
+
+            id:
+                Date.now().toString(),
+
+            medicamentoId:
+                toma.medicamentoId,
+
+            medicamento:
+                toma.medicamento,
+
+            dosis:
+                toma.dosis,
+
+            fechaProgramada:
+                toma.fecha,
+
+            horaProgramada:
+                toma.hora,
+
+            fechaToma:
+                ahora.toISOString(),
+
+            estado:
+                "tomado"
+
+        });
+
+
+        guardarLocalStorage(
+            "medControl_historial",
+            historial
+        );
+
+
+        renderizarHistorial();
+
+        renderizarCumplimiento();
+
+
+        medicacionPendienteModal =
+            null;
+
+        ultimaTomaMostrada =
+            null;
+
+
+        cerrarModal();
+
+
+        actualizarProximaToma();
+
     }
 
 
@@ -1855,7 +2350,9 @@ document.addEventListener("DOMContentLoaded", () => {
             !proximaMedicamento ||
             !proximaHora
         ) {
+
             return;
+
         }
 
 
@@ -1863,143 +2360,228 @@ document.addEventListener("DOMContentLoaded", () => {
             new Date();
 
 
-        let siguiente = null;
+        let siguiente =
+            null;
 
 
-        medicamentos.forEach(med => {
+        medicamentos.forEach(
+            med => {
 
-            if (
-                !med.fechaInicio ||
-                !med.fechaFin ||
-                !Array.isArray(med.horarios)
-            ) {
-                return;
-            }
+                if (
+                    !med.fechaInicio ||
+                    !med.fechaFin ||
+                    !Array.isArray(
+                        med.horarios
+                    )
+                ) {
 
+                    return;
 
-            const inicio =
-                new Date(
-                    `${med.fechaInicio}T00:00:00`
-                );
-
-            const fin =
-                new Date(
-                    `${med.fechaFin}T23:59:59`
-                );
+                }
 
 
-            if (
-                ahora < inicio ||
-                ahora > fin
-            ) {
-                return;
-            }
+                const inicio =
+                    new Date(
+                        `${med.fechaInicio}T00:00:00`
+                    );
 
 
-            med.horarios.forEach(hora => {
-
-                let fechaToma =
-                    combinarFechaHora(
-                        fechaLocalISO(ahora),
-                        hora
+                const fin =
+                    new Date(
+                        `${med.fechaFin}T23:59:59`
                     );
 
 
                 /*
-                 * Si la hora de hoy ya pasó,
-                 * buscamos la del día siguiente.
+                 * Si el tratamiento todavía
+                 * no empieza, buscamos su
+                 * primera toma.
                  */
 
                 if (
-                    fechaToma &&
-                    fechaToma <= ahora
+                    ahora < inicio
                 ) {
 
-                    const mañana =
-                        new Date(ahora);
+                    med.horarios.forEach(
+                        hora => {
 
-                    mañana.setDate(
-                        mañana.getDate() + 1
+                            const fechaToma =
+                                combinarFechaHora(
+                                    med.fechaInicio,
+                                    hora
+                                );
+
+
+                            if (
+                                !siguiente ||
+                                fechaToma <
+                                siguiente.fechaHora
+                            ) {
+
+                                siguiente = {
+
+                                    medicamentoId:
+                                        med.id,
+
+                                    medicamento:
+                                        med.nombre,
+
+                                    dosis:
+                                        med.dosis,
+
+                                    fecha:
+                                        med.fechaInicio,
+
+                                    hora,
+
+                                    fechaHora:
+                                        fechaToma,
+
+                                    clave:
+                                        crearClaveToma(
+                                            med.id,
+                                            med.fechaInicio,
+                                            hora
+                                        )
+
+                                };
+
+                            }
+
+                        }
                     );
 
 
-                    const fechaMañana =
-                        fechaLocalISO(
-                            mañana
-                        );
-
-
-                    fechaToma =
-                        combinarFechaHora(
-                            fechaMañana,
-                            hora
-                        );
-                }
-
-
-                if (
-                    !fechaToma ||
-                    fechaToma > fin
-                ) {
                     return;
+
                 }
 
 
-                const clave =
-                    crearClaveToma(
-                        med.id,
-                        fechaLocalISO(fechaToma),
-                        hora
-                    );
-
-
-                const registro =
-                    cumplimiento.find(
-                        item =>
-                            item.clave === clave
-                    );
-
-
                 if (
-                    registro &&
-                    registro.estado === "tomado"
+                    ahora > fin
                 ) {
+
                     return;
+
                 }
 
 
-                if (
-                    !siguiente ||
-                    fechaToma <
-                    siguiente.fechaHora
-                ) {
+                med.horarios.forEach(
+                    hora => {
 
-                    siguiente = {
+                        let fechaToma =
+                            combinarFechaHora(
+                                fechaLocalISO(
+                                    ahora
+                                ),
+                                hora
+                            );
 
-                        medicamentoId:
-                            med.id,
 
-                        medicamento:
-                            med.nombre,
+                        if (
+                            fechaToma <=
+                            ahora
+                        ) {
 
-                        dosis:
-                            med.dosis,
+                            const mañana =
+                                new Date(
+                                    ahora
+                                );
 
-                        fecha:
-                            fechaLocalISO(fechaToma),
 
-                        hora,
+                            mañana.setDate(
+                                mañana.getDate() +
+                                1
+                            );
 
-                        fechaHora:
-                            fechaToma,
 
-                        clave
-                    };
-                }
+                            fechaToma =
+                                combinarFechaHora(
+                                    fechaLocalISO(
+                                        mañana
+                                    ),
+                                    hora
+                                );
 
-            });
+                        }
 
-        });
+
+                        if (
+                            fechaToma > fin
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        const clave =
+                            crearClaveToma(
+                                med.id,
+                                fechaLocalISO(
+                                    fechaToma
+                                ),
+                                hora
+                            );
+
+
+                        const registro =
+                            cumplimiento.find(
+                                item =>
+                                    item.clave ===
+                                    clave
+                            );
+
+
+                        if (
+                            registro &&
+                            registro.estado ===
+                            "tomado"
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        if (
+                            !siguiente ||
+                            fechaToma <
+                            siguiente.fechaHora
+                        ) {
+
+                            siguiente = {
+
+                                medicamentoId:
+                                    med.id,
+
+                                medicamento:
+                                    med.nombre,
+
+                                dosis:
+                                    med.dosis,
+
+                                fecha:
+                                    fechaLocalISO(
+                                        fechaToma
+                                    ),
+
+                                hora,
+
+                                fechaHora:
+                                    fechaToma,
+
+                                clave
+
+                            };
+
+                        }
+
+                    }
+                );
+
+            }
+        );
 
 
         if (!siguiente) {
@@ -2007,17 +2589,25 @@ document.addEventListener("DOMContentLoaded", () => {
             proximaMedicamento.textContent =
                 "No hay próximas tomas";
 
+
             proximaHora.textContent =
                 "--:--";
 
+
             if (contador) {
+
                 contador.textContent =
                     "Sin tomas programadas";
+
             }
 
-            medicacionPendienteModal = null;
+
+            medicacionPendienteModal =
+                null;
+
 
             return;
+
         }
 
 
@@ -2036,6 +2626,7 @@ document.addEventListener("DOMContentLoaded", () => {
         actualizarContador(
             siguiente.fechaHora
         );
+
     }
 
 
@@ -2048,7 +2639,9 @@ document.addEventListener("DOMContentLoaded", () => {
     ) {
 
         if (!contador) {
+
             return;
+
         }
 
 
@@ -2056,20 +2649,41 @@ document.addEventListener("DOMContentLoaded", () => {
             new Date();
 
 
+        /*
+         * Si está pospuesto,
+         * utilizamos esa hora.
+         */
+
+        if (
+            tiempoPospuesto
+        ) {
+
+            fechaObjetivo =
+                tiempoPospuesto;
+
+        }
+
+
         const diferencia =
-            fechaObjetivo - ahora;
+            fechaObjetivo -
+            ahora;
 
 
-        if (diferencia <= 0) {
+        if (
+            diferencia <= 0
+        ) {
 
             contador.textContent =
                 "¡Es hora de tomar el medicamento!";
+
 
             mostrarModalRecordatorio(
                 medicacionPendienteModal
             );
 
+
             return;
+
         }
 
 
@@ -2100,13 +2714,23 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-        contador.textContent =
-            `Faltan ${horas}h ${minutos}m ${segundos}s`;
+        if (horas > 0) {
+
+            contador.textContent =
+                `Faltan ${horas}h ${minutos}m ${segundos}s`;
+
+        } else {
+
+            contador.textContent =
+                `Faltan ${minutos}m ${segundos}s`;
+
+        }
+
     }
 
 
     /* =========================================================
-       MODAL DE RECORDATORIO
+       MODAL
     ========================================================= */
 
     function mostrarModalRecordatorio(
@@ -2117,28 +2741,24 @@ document.addEventListener("DOMContentLoaded", () => {
             !modalRecordatorio ||
             !toma
         ) {
+
             return;
+
         }
 
 
-        const identificador =
-            toma.clave;
-
-
-        /*
-         * Evitamos abrir el mismo recordatorio
-         * repetidamente.
-         */
-
         if (
-            ultimaTomaMostrada === identificador
+            ultimaTomaMostrada ===
+            toma.clave
         ) {
+
             return;
+
         }
 
 
         ultimaTomaMostrada =
-            identificador;
+            toma.clave;
 
 
         if (recordatorioTexto) {
@@ -2146,26 +2766,35 @@ document.addEventListener("DOMContentLoaded", () => {
             recordatorioTexto.innerHTML = `
 
                 <strong>
-                    💊 ${escaparHTML(toma.medicamento)}
+                    💊
+                    ${escaparHTML(
+                        toma.medicamento
+                    )}
                 </strong>
 
                 <br>
 
                 Dosis:
-                ${escaparHTML(toma.dosis)}
+                ${escaparHTML(
+                    toma.dosis
+                )}
 
                 <br>
 
                 Hora:
-                ${escaparHTML(toma.hora)}
+                ${escaparHTML(
+                    toma.hora
+                )}
 
             `;
+
         }
 
 
         modalRecordatorio.classList.add(
             "activo"
         );
+
     }
 
 
@@ -2176,9 +2805,9 @@ document.addEventListener("DOMContentLoaded", () => {
             modalRecordatorio.classList.remove(
                 "activo"
             );
+
         }
 
-        ultimaTomaMostrada = null;
     }
 
 
@@ -2198,15 +2827,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 }
 
-
-                cerrarModal();
-
-                medicacionPendienteModal =
-                    null;
-
-                actualizarProximaToma();
             }
         );
+
     }
 
 
@@ -2216,47 +2839,56 @@ document.addEventListener("DOMContentLoaded", () => {
             "click",
             () => {
 
-                cerrarModal();
+                if (
+                    medicacionPendienteModal
+                ) {
 
-                /*
-                 * Se vuelve a mostrar el recordatorio
-                 * en la siguiente revisión.
-                 */
+                    tiempoPospuesto =
+                        new Date(
+                            Date.now() +
+                            10 * 60 * 1000
+                        );
 
-                ultimaTomaMostrada = null;
+                    ultimaTomaMostrada =
+                        null;
+
+                    cerrarModal();
+
+                    actualizarContador(
+                        tiempoPospuesto
+                    );
+
+                }
+
             }
         );
+
     }
 
 
     /* =========================================================
-       HISTORIAL DE TOMAS
+       HISTORIAL GENERAL
     ========================================================= */
 
     function renderizarHistorial() {
 
         if (!historialContainer) {
+
             return;
+
         }
 
 
-        if (historial.length === 0) {
+        if (
+            historial.length === 0
+        ) {
 
             historialContainer.innerHTML = `
 
-                <div class="vacio">
-
-                    <div class="vacio-icon">
-                        📋
-                    </div>
-
-                    <h3>
-                        No hay tomas registradas
-                    </h3>
+                <div class="vacio pequeño">
 
                     <p>
-                        Aquí aparecerá el historial
-                        de medicamentos tomados.
+                        Todavía no hay registros de tomas.
                     </p>
 
                 </div>
@@ -2264,86 +2896,99 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
 
             return;
+
         }
 
 
-        const ordenado =
-            [...historial].sort(
-                (a, b) =>
-                    new Date(b.fechaToma) -
-                    new Date(a.fechaToma)
-            );
+        const registros =
+            [...historial]
+                .sort(
+                    (a, b) =>
+                        new Date(
+                            b.fechaToma
+                        ) -
+                        new Date(
+                            a.fechaToma
+                        )
+                );
 
 
         historialContainer.innerHTML =
-            ordenado.map(item => {
+            registros
+                .map(item => {
 
-                const fecha =
-                    new Date(
-                        item.fechaToma
-                    );
-
-
-                const fechaTexto =
-                    fecha.toLocaleDateString(
-                        "es-GT"
-                    );
+                    const fecha =
+                        new Date(
+                            item.fechaToma
+                        );
 
 
-                const horaTexto =
-                    fecha.toLocaleTimeString(
-                        "es-GT",
-                        {
-                            hour: "2-digit",
-                            minute: "2-digit"
-                        }
-                    );
+                    const fechaTexto =
+                        fecha.toLocaleDateString(
+                            "es-GT"
+                        );
 
 
-                return `
+                    const horaTexto =
+                        fecha.toLocaleTimeString(
+                            "es-GT",
+                            {
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            }
+                        );
 
-                    <div class="historial-item">
 
-                        <div>
+                    return `
 
-                            <strong>
-                                💊
-                                ${escaparHTML(item.medicamento)}
-                            </strong>
+                        <div class="historial-item">
 
-                            <span>
-                                Dosis:
-                                ${escaparHTML(item.dosis)}
-                            </span>
+                            <div>
+
+                                <strong>
+                                    💊
+                                    ${escaparHTML(
+                                        item.medicamento
+                                    )}
+                                </strong>
+
+                                <span>
+                                    Dosis:
+                                    ${escaparHTML(
+                                        item.dosis
+                                    )}
+                                </span>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Programado:
+                                    ${formatearFecha(
+                                        item.fechaProgramada
+                                    )}
+                                    ${escaparHTML(
+                                        item.horaProgramada
+                                    )}
+                                </span>
+
+                                <span>
+                                    Registrado:
+                                    ${fechaTexto}
+                                    ${horaTexto}
+                                </span>
+
+                            </div>
 
                         </div>
 
+                    `;
 
-                        <div>
+                })
+                .join("");
 
-                            <span>
-                                Programado:
-                                ${formatearFecha(
-                                    item.fechaProgramada
-                                )}
-                                ${escaparHTML(
-                                    item.horaProgramada
-                                )}
-                            </span>
-
-                            <span>
-                                Registrado:
-                                ${fechaTexto}
-                                ${horaTexto}
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                `;
-
-            }).join("");
     }
 
 
@@ -2351,134 +2996,148 @@ document.addEventListener("DOMContentLoaded", () => {
        RECETAS
     ========================================================= */
 
-    function guardarReceta(event) {
-
-        event.preventDefault();
-
-
-        if (
-            !medicamentoReceta ||
-            !fechaReceta ||
-            !fechaVencimientoReceta
-        ) {
-            return;
-        }
-
-
-        const medico =
-            nombreMedico
-                ? nombreMedico.value.trim()
-                : "";
-
-
-        const numero =
-            numeroReceta
-                ? numeroReceta.value.trim()
-                : "";
-
-
-        const medicamento =
-            medicamentoReceta.value.trim();
-
-
-        const fecha =
-            fechaReceta.value;
-
-
-        const vencimiento =
-            fechaVencimientoReceta.value;
-
-
-        const diasAviso =
-            diasAvisoReceta
-                ? Number(
-                    diasAvisoReceta.value
-                ) || 0
-                : 0;
-
-
-        if (!medicamento) {
-
-            alert(
-                "Ingresa el medicamento de la receta."
-            );
-
-            return;
-        }
-
-
-        if (!fecha || !vencimiento) {
-
-            alert(
-                "Ingresa las fechas de la receta."
-            );
-
-            return;
-        }
-
-
-        if (vencimiento < fecha) {
-
-            alert(
-                "La fecha de vencimiento no puede ser anterior a la fecha de emisión."
-            );
-
-            return;
-        }
-
-
-        recetas.push({
-
-            id:
-                Date.now().toString(),
-
-            medico,
-
-            numero,
-
-            medicamento,
-
-            fecha,
-
-            vencimiento,
-
-            diasAviso,
-
-            alertas:
-                0,
-
-            fechaRegistro:
-                new Date().toISOString()
-
-        });
-
-
-        guardarLocalStorage(
-            "medControl_recetas",
-            recetas
-        );
-
-
-        if (formReceta) {
-            formReceta.reset();
-        }
-
-
-        renderizarRecetas();
-
-
-        alert(
-            "Receta guardada correctamente."
-        );
-    }
-
-
     if (formReceta) {
 
         formReceta.addEventListener(
             "submit",
-            guardarReceta
+            (event) => {
+
+                event.preventDefault();
+
+
+                const medico =
+                    nombreMedico
+                        ? nombreMedico.value.trim()
+                        : "";
+
+
+                const numero =
+                    numeroReceta
+                        ? numeroReceta.value.trim()
+                        : "";
+
+
+                const medicamento =
+                    medicamentoReceta
+                        ? medicamentoReceta.value.trim()
+                        : "";
+
+
+                const fecha =
+                    fechaReceta
+                        ? fechaReceta.value
+                        : "";
+
+
+                const vencimiento =
+                    fechaVencimientoReceta
+                        ? fechaVencimientoReceta.value
+                        : "";
+
+
+                const diasAviso =
+                    diasAvisoReceta
+                        ? Number(
+                            diasAvisoReceta.value
+                        ) || 0
+                        : 0;
+
+
+                if (!medicamento) {
+
+                    alert(
+                        "Ingresa el medicamento."
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    !fecha ||
+                    !vencimiento
+                ) {
+
+                    alert(
+                        "Ingresa las fechas."
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    vencimiento <
+                    fecha
+                ) {
+
+                    alert(
+                        "La fecha de vencimiento no puede ser anterior a la fecha de receta."
+                    );
+
+                    return;
+
+                }
+
+
+                recetas.push({
+
+                    id:
+                        Date.now().toString(),
+
+                    medico,
+
+                    numero,
+
+                    medicamento,
+
+                    fecha,
+
+                    vencimiento,
+
+                    diasAviso,
+
+                    alertas:
+                        0,
+
+                    fechaRegistro:
+                        new Date().toISOString(),
+
+                    ultimaAlerta:
+                        ""
+
+                });
+
+
+                guardarLocalStorage(
+                    "medControl_recetas",
+                    recetas
+                );
+
+
+                formReceta.reset();
+
+
+                if (diasAvisoReceta) {
+
+                    diasAvisoReceta.value =
+                        7;
+
+                }
+
+
+                renderizarRecetas();
+
+
+                alert(
+                    "Receta guardada correctamente."
+                );
+
+            }
         );
+
     }
 
 
@@ -2497,19 +3156,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         const diferencia =
-            vencimiento - ahora;
+            vencimiento -
+            ahora;
 
 
-        if (diferencia < 0) {
+        if (
+            diferencia < 0
+        ) {
 
             return {
-                clase: "vencida",
-                texto: "Vencida"
+
+                clase:
+                    "vencida",
+
+                texto:
+                    "Vencida"
+
             };
+
         }
 
 
-        const diasRestantes =
+        const dias =
             Math.ceil(
                 diferencia /
                 (1000 * 60 * 60 * 24)
@@ -2517,36 +3185,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         if (
-            diasRestantes <=
-            Number(receta.diasAviso || 0)
+            dias <=
+            Number(
+                receta.diasAviso || 0
+            )
         ) {
 
             return {
-                clase: "alerta",
+
+                clase:
+                    "alerta",
+
                 texto:
-                    `Vence en ${diasRestantes} día(s)`
+                    `Vence en ${dias} día(s)`
+
             };
+
         }
 
 
         return {
 
-            clase: "normal",
+            clase:
+                "normal",
 
             texto:
-                `Vigente - ${diasRestantes} día(s) restantes`
+                `Vigente - ${dias} día(s) restantes`
+
         };
+
     }
 
 
     function renderizarRecetas() {
 
         if (!listaRecetas) {
+
             return;
+
         }
 
 
-        if (recetas.length === 0) {
+        if (
+            recetas.length === 0
+        ) {
 
             listaRecetas.innerHTML = `
 
@@ -2561,8 +3243,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </h3>
 
                     <p>
-                        Agrega una receta médica
-                        para comenzar.
+                        Las recetas aparecerán aquí.
                     </p>
 
                 </div>
@@ -2570,11 +3251,213 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
 
             return;
+
         }
 
 
         listaRecetas.innerHTML =
-            recetas.map(receta => {
+            recetas
+                .map(
+                    receta => {
+
+                        const estado =
+                            obtenerEstadoReceta(
+                                receta
+                            );
+
+
+                        return `
+
+                            <div class="receta">
+
+                                <div class="receta-header">
+
+                                    <div>
+
+                                        <h3>
+                                            📝
+                                            ${escaparHTML(
+                                                receta.medicamento
+                                            )}
+                                        </h3>
+
+                                        <span
+                                            class="receta-numero"
+                                        >
+                                            Receta:
+                                            ${escaparHTML(
+                                                receta.numero ||
+                                                "Sin número"
+                                            )}
+                                        </span>
+
+                                    </div>
+
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-danger btn-eliminar-receta"
+                                        data-id="${receta.id}"
+                                    >
+                                        🗑️
+                                    </button>
+
+                                </div>
+
+
+                                <div class="receta-datos">
+
+                                    <div>
+
+                                        <strong>
+                                            👨‍⚕️ Médico
+                                        </strong>
+
+                                        <span>
+                                            ${escaparHTML(
+                                                receta.medico ||
+                                                "No registrado"
+                                            )}
+                                        </span>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <strong>
+                                            📅 Fecha
+                                        </strong>
+
+                                        <span>
+                                            ${formatearFecha(
+                                                receta.fecha
+                                            )}
+                                        </span>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <strong>
+                                            ⏳ Vencimiento
+                                        </strong>
+
+                                        <span>
+                                            ${formatearFecha(
+                                                receta.vencimiento
+                                            )}
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div
+                                    class="receta-estado
+                                    ${estado.clase}"
+                                >
+
+                                    ${estado.texto}
+
+                                </div>
+
+
+                                <div class="receta-footer">
+
+                                    <span>
+                                        🔔 Aviso:
+                                        ${receta.diasAviso}
+                                        día(s) antes
+                                    </span>
+
+                                    <span>
+                                        Alertas:
+                                        ${receta.alertas || 0}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+                )
+                .join("");
+
+
+        document
+            .querySelectorAll(
+                ".btn-eliminar-receta"
+            )
+            .forEach(
+                boton => {
+
+                    boton.addEventListener(
+                        "click",
+                        () => {
+
+                            const id =
+                                boton.dataset.id;
+
+
+                            const confirmar =
+                                confirm(
+                                    "¿Deseas eliminar esta receta?"
+                                );
+
+
+                            if (!confirmar) {
+
+                                return;
+
+                            }
+
+
+                            recetas =
+                                recetas.filter(
+                                    receta =>
+                                        receta.id !==
+                                        id
+                                );
+
+
+                            guardarLocalStorage(
+                                "medControl_recetas",
+                                recetas
+                            );
+
+
+                            renderizarRecetas();
+
+                        }
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* =========================================================
+       ALERTAS DE RECETAS
+    ========================================================= */
+
+    function comprobarAlertasRecetas() {
+
+        let cambios =
+            false;
+
+
+        const hoy =
+            fechaLocalISO();
+
+
+        recetas.forEach(
+            receta => {
 
                 const estado =
                     obtenerEstadoReceta(
@@ -2582,242 +3465,76 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
 
 
-                return `
-
-                    <div class="receta">
-
-                        <div class="receta-header">
-
-                            <div>
-
-                                <h3>
-                                    📝
-                                    ${escaparHTML(
-                                        receta.medicamento
-                                    )}
-                                </h3>
-
-                                <span class="receta-numero">
-                                    Receta:
-                                    ${escaparHTML(
-                                        receta.numero ||
-                                        "Sin número"
-                                    )}
-                                </span>
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                class="btn btn-danger btn-eliminar-receta"
-                                data-id="${receta.id}"
-                            >
-                                🗑️
-                            </button>
-
-                        </div>
-
-
-                        <div class="receta-datos">
-
-                            <div>
-                                <strong>
-                                    👨‍⚕️ Médico
-                                </strong>
-
-                                <span>
-                                    ${escaparHTML(
-                                        receta.medico ||
-                                        "No registrado"
-                                    )}
-                                </span>
-                            </div>
-
-
-                            <div>
-                                <strong>
-                                    📅 Fecha de emisión
-                                </strong>
-
-                                <span>
-                                    ${formatearFecha(
-                                        receta.fecha
-                                    )}
-                                </span>
-                            </div>
-
-
-                            <div>
-                                <strong>
-                                    ⏳ Vencimiento
-                                </strong>
-
-                                <span>
-                                    ${formatearFecha(
-                                        receta.vencimiento
-                                    )}
-                                </span>
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="receta-estado ${estado.clase}"
-                        >
-                            ${estado.texto}
-                        </div>
-
-
-                        <div class="receta-footer">
-
-                            <span>
-                                🔔 Aviso:
-                                ${receta.diasAviso}
-                                día(s) antes
-                            </span>
-
-                            <span>
-                                Alertas:
-                                ${receta.alertas || 0}
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                `;
-
-            }).join("");
-
-
-        document
-            .querySelectorAll(
-                ".btn-eliminar-receta"
-            )
-            .forEach(boton => {
-
-                boton.addEventListener(
-                    "click",
-                    () => {
-
-                        const id =
-                            boton.dataset.id;
-
-
-                        recetas =
-                            recetas.filter(
-                                receta =>
-                                    receta.id !== id
-                            );
-
-
-                        guardarLocalStorage(
-                            "medControl_recetas",
-                            recetas
-                        );
-
-
-                        renderizarRecetas();
-                    }
-                );
-
-            });
-    }
-
-
-    /* =========================================================
-       COMPROBAR ALERTAS DE RECETAS
-    ========================================================= */
-
-    function comprobarAlertasRecetas() {
-
-        let huboCambios = false;
-
-
-        recetas.forEach(receta => {
-
-            const estado =
-                obtenerEstadoReceta(
-                    receta
-                );
-
-
-            if (
-                estado.clase === "alerta"
-            ) {
-
-                /*
-                 * Solo incrementamos la alerta
-                 * una vez por día.
-                 */
-
-                const hoy =
-                    fechaLocalISO();
-
-
                 if (
-                    receta.ultimaAlerta !== hoy
+                    estado.clase ===
+                    "alerta"
                 ) {
 
-                    receta.alertas =
-                        Number(
-                            receta.alertas || 0
-                        ) + 1;
-
-
-                    receta.ultimaAlerta =
-                        hoy;
-
-
-                    huboCambios = true;
-
-
-                    /*
-                     * Si las notificaciones están permitidas,
-                     * mostramos una notificación.
-                     */
-
                     if (
-                        "Notification" in window &&
-                        Notification.permission ===
-                        "granted"
+                        receta.ultimaAlerta !==
+                        hoy
                     ) {
 
-                        new Notification(
-                            "MedControl - Receta",
-                            {
-                                body:
-                                    `La receta de ${receta.medicamento} está próxima a vencer.`
-                            }
-                        );
+                        receta.alertas =
+                            Number(
+                                receta.alertas ||
+                                0
+                            ) + 1;
+
+
+                        receta.ultimaAlerta =
+                            hoy;
+
+
+                        cambios =
+                            true;
+
+
+                        if (
+                            "Notification" in
+                            window &&
+                            Notification.permission ===
+                            "granted"
+                        ) {
+
+                            new Notification(
+                                "MedControl - Receta",
+                                {
+
+                                    body:
+                                        `La receta de ${receta.medicamento} está próxima a vencer.`
+
+                                }
+                            );
+
+                        }
+
                     }
+
                 }
+
             }
+        );
 
-        });
 
-
-        if (huboCambios) {
+        if (cambios) {
 
             guardarLocalStorage(
                 "medControl_recetas",
                 recetas
             );
 
+
             renderizarRecetas();
+
         }
+
     }
 
 
     /* =========================================================
        NOTIFICACIONES
     ========================================================= */
-
-    const btnNotificaciones =
-        $("btnNotificaciones");
-
 
     if (btnNotificaciones) {
 
@@ -2834,17 +3551,20 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
 
                     return;
+
                 }
 
 
                 try {
 
                     const permiso =
-                        await Notification.requestPermission();
+                        await Notification
+                            .requestPermission();
 
 
                     if (
-                        permiso === "granted"
+                        permiso ===
+                        "granted"
                     ) {
 
                         btnNotificaciones.textContent =
@@ -2860,12 +3580,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         alert(
                             "Las notificaciones no fueron activadas."
                         );
+
                     }
 
                 } catch (error) {
 
                     console.error(
-                        "Error con notificaciones:",
                         error
                     );
 
@@ -2873,6 +3593,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             }
         );
+
     }
 
 
@@ -2882,23 +3603,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function actualizarSistema() {
 
-        /*
-         * Actualizamos tomas que ya pasaron.
-         */
-
         actualizarHistorialCumplimiento();
 
-
-        /*
-         * Próxima toma.
-         */
-
         actualizarProximaToma();
-
-
-        /*
-         * Contador.
-         */
 
         if (
             medicacionPendienteModal &&
@@ -2908,21 +3615,11 @@ document.addEventListener("DOMContentLoaded", () => {
             actualizarContador(
                 medicacionPendienteModal.fechaHora
             );
+
         }
-
-
-        /*
-         * Recetas.
-         */
 
         comprobarAlertasRecetas();
 
-
-        /*
-         * Cumplimiento visual.
-         */
-
-        renderizarCumplimiento();
     }
 
 
@@ -2943,6 +3640,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ) {
 
         generarHorarios();
+
     }
 
 
@@ -2962,7 +3660,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /*
-     * Actualización cada segundo.
+     * Actualizamos el sistema cada segundo
+     * para el contador y los recordatorios.
      */
 
     setInterval(
